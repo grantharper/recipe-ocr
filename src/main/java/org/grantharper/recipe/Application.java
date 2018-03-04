@@ -10,14 +10,16 @@ import java.util.List;
 import org.grantharper.recipe.ocr.FileUtils;
 import org.grantharper.recipe.ocr.HtmlCreator;
 import org.grantharper.recipe.ocr.HtmlCreatorImpl;
+import org.grantharper.recipe.ocr.OCRException;
 import org.grantharper.recipe.ocr.OCRExecutor;
+import org.grantharper.recipe.ocr.OCRExecutorImpl;
 
-import net.sourceforge.tess4j.TesseractException;
+import net.sourceforge.tess4j.Tesseract;
 
 public class Application
 {
 
-  OCRExecutor ocr = new OCRExecutor();
+  OCRExecutor ocr = new OCRExecutorImpl(new Tesseract());
 
   public static void main(String[] args)
   {
@@ -26,6 +28,7 @@ public class Application
 
     try
     {
+      Files.createDirectories(Paths.get("output"));
       Files.list(Paths.get("img/"))
           .filter(p -> p.getFileName().toString().endsWith(".png"))
           .forEach(p -> {
@@ -44,6 +47,7 @@ public class Application
 
     try
     {
+      
       String recipeText = ocr.performOCR(imageFile);
       HtmlCreator htmlCreator = new HtmlCreatorImpl.Builder().setRecipeText(recipeText)
           .build();
@@ -51,15 +55,16 @@ public class Application
       List<String> htmlPage = htmlCreator.generateHtml();
       String htmlFilename = FileUtils.changePngExtensionToHtml(imageFile.getFileName()
           .toString());
-      Files.createDirectories(Paths.get("output"));
+      
       Files.write(Paths.get("output/", htmlFilename), htmlPage, StandardOpenOption.CREATE);
       
       System.out.println("HTML generated for " + htmlFilename);
-    } catch (TesseractException e)
-    {
-      System.out.println("OCR failed");
+    } 
+    catch(OCRException e) {
+      System.out.println("Error with OCR processing: " + imageFile);
       e.printStackTrace();
-    } catch (IOException e)
+    }
+    catch (IOException e)
     {
       System.out.println("HTML generation failed");
       e.printStackTrace();
