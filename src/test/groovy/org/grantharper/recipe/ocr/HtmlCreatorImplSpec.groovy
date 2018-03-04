@@ -4,7 +4,7 @@ import org.grantharper.recipe.Application
 import org.grantharper.recipe.ocr.HtmlCreator
 import org.grantharper.recipe.ocr.HtmlCreatorImpl
 
-class HtmlCreatorSpec extends spock.lang.Specification {
+class HtmlCreatorImplSpec extends spock.lang.Specification {
     
     def multiLineString = '''
                         3 cups crumbled Greek feta
