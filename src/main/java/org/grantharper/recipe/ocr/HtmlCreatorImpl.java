@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class HtmlCreatorImpl implements HtmlCreator
 {
@@ -34,17 +35,18 @@ public class HtmlCreatorImpl implements HtmlCreator
     }
   }
 
-  public List<String> generateHtml()
+  public List<String> generateHtmlPage()
   {
     return surroundWithHtml5Document(createMultiLineParagraphs(this.recipeText));
   }
-  
-  protected List<String> surroundWithHtml5Document(List<String> input) 
+
+  protected List<String> surroundWithHtml5Document(List<String> input)
   {
-    try
+    try(Stream<String> topLines = Files.lines(Paths.get("html/top.html"));
+    Stream<String> bottomLines = Files.lines(Paths.get("html/bottom.html"));)
     {
-      List<String> header = Files.lines(Paths.get("html/top.html")).collect(Collectors.toList());
-      List<String> footer = Files.lines(Paths.get("html/bottom.html")).collect(Collectors.toList());
+      List<String> header = topLines.collect(Collectors.toList());
+      List<String> footer = bottomLines.collect(Collectors.toList());
       List<String> html = new ArrayList<>();
       html.addAll(header);
       html.addAll(input);
@@ -56,7 +58,7 @@ public class HtmlCreatorImpl implements HtmlCreator
       return new ArrayList<>();
     }
   }
-  
+
   protected List<String> createMultiLineParagraphs(String input)
   {
     String[] output = this.recipeText.split("\n");
@@ -70,8 +72,38 @@ public class HtmlCreatorImpl implements HtmlCreator
 
   protected String surroundLineBreaksWithParagraphs(String input)
   {
-    String output = "<p>" + input + "</p>";
-    return output;
+    return "<p>" + input + "</p>";
+  }
+
+  protected String surroundStandardLineBreaksWithDivs(String input)
+  {
+    return "<div class='ocr-recipe'>" + input + "</div>";
+  }
+
+  protected String surroundTitleWithDivs(String input)
+  {
+    return "<div class='ocr-title'>" + input + "</div>";
+  }
+
+  @Override
+  public List<String> generateDivs()
+  {
+    String[] output = this.recipeText.split("\n");
+    List<String> divFinalOutput = new ArrayList<>();
+    List<String> divOutput = Arrays.asList(output)
+        .stream()
+        .map(String::trim)
+        .filter(s -> !s.equals(""))
+        .collect(Collectors.toList());
+    for (int i = 0; i < divOutput.size(); i++)
+    {
+      if (i == 0)
+        divFinalOutput.add(surroundTitleWithDivs(divOutput.get(i)));
+      else
+        divFinalOutput.add(surroundStandardLineBreaksWithDivs(divOutput.get(i)));
+
+    }
+    return divFinalOutput;
   }
 
 }

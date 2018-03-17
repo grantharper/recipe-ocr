@@ -1,10 +1,12 @@
 package org.grantharper.recipe;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.List;
 
 import org.grantharper.recipe.ocr.FileUtils;
@@ -31,9 +33,7 @@ public class Application
       Files.createDirectories(Paths.get("output"));
       Files.list(Paths.get("img/"))
           .filter(p -> p.getFileName().toString().endsWith(".png"))
-          .forEach(p -> {
-            app.performOCR(p);
-          });
+          .forEach(app::performOCR);
     } catch (IOException e)
     {
       System.out.println("File issue in image directory");
@@ -49,14 +49,19 @@ public class Application
     {
       
       String recipeText = ocr.performOCR(imageFile);
+      
+      Files.write(Paths.get("output/", FileUtils.changePngExtensionToTxt(imageFile.getFileName()
+          .toString())), Arrays.asList(recipeText), Charset.defaultCharset(), StandardOpenOption.CREATE);
+      
       HtmlCreator htmlCreator = new HtmlCreatorImpl.Builder().setRecipeText(recipeText)
           .build();
 
-      List<String> htmlPage = htmlCreator.generateHtml();
+      List<String> htmlPage = htmlCreator.generateHtmlPage();
       String htmlFilename = FileUtils.changePngExtensionToHtml(imageFile.getFileName()
           .toString());
       
       Files.write(Paths.get("output/", htmlFilename), htmlPage, StandardOpenOption.CREATE);
+      
       
       System.out.println("HTML generated for " + htmlFilename);
     } 

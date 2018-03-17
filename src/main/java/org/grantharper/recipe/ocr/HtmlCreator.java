@@ -5,6 +5,8 @@ import java.util.List;
 public interface HtmlCreator
 {
 
-    public List<String> generateHtml();
+    public List<String> generateHtmlPage();
+    
+    public List<String> generateDivs();
     
 }
