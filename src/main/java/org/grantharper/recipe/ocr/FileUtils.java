@@ -14,4 +14,9 @@ public class FileUtils
   {
     return pngFilename.substring(0, pngFilename.length() -4) + ".txt";
   }
+
+  public static String changePngExtensionToJson(String pngFilename)
+  {
+    return pngFilename.substring(0, pngFilename.length() -4) + ".json";
+  }
 }

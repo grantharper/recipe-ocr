@@ -15,6 +15,10 @@ import org.grantharper.recipe.ocr.HtmlCreatorImpl;
 import org.grantharper.recipe.ocr.OCRException;
 import org.grantharper.recipe.ocr.OCRExecutor;
 import org.grantharper.recipe.ocr.OCRExecutorImpl;
+import org.grantharper.recipe.ocr.OutputCreator;
+import org.grantharper.recipe.ocr.Recipe;
+import org.grantharper.recipe.ocr.RecipeCreator;
+import org.grantharper.recipe.ocr.RecipeJsonCreator;
 
 import net.sourceforge.tess4j.Tesseract;
 
@@ -32,7 +36,9 @@ public class Application
     {
       Files.createDirectories(Paths.get("output"));
       Files.list(Paths.get("img/"))
-          .filter(p -> p.getFileName().toString().endsWith(".png"))
+          .filter(p -> p.getFileName()
+              .toString()
+              .endsWith(".png"))
           .forEach(app::performOCR);
     } catch (IOException e)
     {
@@ -50,30 +56,42 @@ public class Application
       
       String recipeText = ocr.performOCR(imageFile);
       
-      Files.write(Paths.get("output/", FileUtils.changePngExtensionToTxt(imageFile.getFileName()
-          .toString())), Arrays.asList(recipeText), Charset.defaultCharset(), StandardOpenOption.CREATE);
+      String json;
+      OutputCreator outputCreator = new RecipeJsonCreator();
+      Recipe recipe = new RecipeCreator(recipeText).convertTextToRecipe();
+      json = outputCreator.generateOutput(recipe);
+      List<String> output = Arrays.asList(json);
       
-      HtmlCreator htmlCreator = new HtmlCreatorImpl.Builder().setRecipeText(recipeText)
-          .build();
+      Files.write(Paths.get("output/", FileUtils.changePngExtensionToJson(imageFile.getFileName()
+          .toString())), output, Charset.defaultCharset(), StandardOpenOption.CREATE);
 
-      List<String> htmlPage = htmlCreator.generateHtmlPage();
-      String htmlFilename = FileUtils.changePngExtensionToHtml(imageFile.getFileName()
-          .toString());
-      
-      Files.write(Paths.get("output/", htmlFilename), htmlPage, StandardOpenOption.CREATE);
-      
-      
-      System.out.println("HTML generated for " + htmlFilename);
-    } 
-    catch(OCRException e) {
+    } catch (OCRException e)
+    {
       System.out.println("Error with OCR processing: " + imageFile);
       e.printStackTrace();
-    }
-    catch (IOException e)
+    } catch (IOException e)
     {
       System.out.println("HTML generation failed");
       e.printStackTrace();
     }
+  }
+
+  public void writeOcrResultToTextFile(String recipeText, Path imageFile) throws IOException
+  {
+    Files.write(Paths.get("output/", FileUtils.changePngExtensionToTxt(imageFile.getFileName()
+        .toString())), Arrays.asList(recipeText), Charset.defaultCharset(), StandardOpenOption.CREATE);
+  }
+
+  public void writeOcrResultToHtml(String recipeText, Path imageFile) throws IOException
+  {
+    HtmlCreator htmlCreator = new HtmlCreatorImpl.Builder().setRecipeText(recipeText)
+        .build();
+
+    List<String> htmlPage = htmlCreator.generateHtmlPage();
+    String htmlFilename = FileUtils.changePngExtensionToHtml(imageFile.getFileName()
+        .toString());
+
+    Files.write(Paths.get("output/", htmlFilename), htmlPage, StandardOpenOption.CREATE);
   }
 
 }
