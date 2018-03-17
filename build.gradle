@@ -12,6 +12,15 @@ repositories {
 
 dependencies {
   compile "net.sourceforge.tess4j:tess4j:3.4.3"
+  // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+  compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.4'
+  // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+  compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.4'
+  // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
+  compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.4'
+  
+  
+  
   // mandatory dependencies for using Spock
   compile "org.codehaus.groovy:groovy-all:2.4.13"
   testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
