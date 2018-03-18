@@ -1,4 +1,6 @@
-package org.grantharper.recipe.ocr;
+package org.grantharper.recipe.serializer;
+
+import org.grantharper.recipe.domain.Recipe;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

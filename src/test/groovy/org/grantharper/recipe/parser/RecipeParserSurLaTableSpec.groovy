@@ -1,4 +1,4 @@
-package org.grantharper.recipe.ocr
+package org.grantharper.recipe.parser
 
 import java.nio.file.Path
 
@@ -7,20 +7,25 @@ import static org.hamcrest.CoreMatchers.instanceOf
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Paths
+
+import org.grantharper.recipe.parser.RecipeParserAbstract
+import org.grantharper.recipe.parser.RecipeParserSurLaTable
+
 import spock.lang.Specification
 
-class RecipeCreatorSpec extends Specification {
+class RecipeParserSurLaTableSpec extends Specification {
   
   Path recipeTestFile
   List<String> recipeLines
   String recipeText
-  RecipeCreator recipeCreator
+  RecipeParserAbstract recipeCreator
   
   def setup() {
-    recipeTestFile = Paths.get("src/test/resources/recipe.txt")
+    recipeTestFile = Paths.get("src/test/resources/sur-la-table-recipe.txt")
     recipeLines = Files.readAllLines(recipeTestFile, Charset.defaultCharset())
     recipeText = recipeLines.stream().reduce("", {String a, String b -> a + b + "\n"})
-    recipeCreator = new RecipeCreator(recipeText)
+    recipeCreator = new RecipeParserSurLaTable();
+    recipeCreator.parseRecipeLines(recipeText);
   }
   
   def cleanup() {
@@ -28,6 +33,8 @@ class RecipeCreatorSpec extends Specification {
   }
 
   def "Extract title from recipe raw text" () {
+    given: "indices are set"
+    recipeCreator.identifyLineIndexes()
     
     when: "title is extracted from the recipe"
     String title = recipeCreator.extractTitle()
@@ -38,6 +45,9 @@ class RecipeCreatorSpec extends Specification {
   }
 
   def "Extract serving size from recipe raw text" () {
+    given: "indices are set"
+    recipeCreator.identifyLineIndexes()
+    
     when: "serving size is extracted from the recipe"
     String servingSize = recipeCreator.extractServingSize()
     
@@ -47,17 +57,19 @@ class RecipeCreatorSpec extends Specification {
   
   def "Identify indices of the ingredients, instructions, and footer" () {
     when: "indices are extracte from the recipe"
-    recipeCreator.identifyIngredientAndInstructionsIndices()
+    recipeCreator.recipeLines 
+    recipeCreator.identifyLineIndexes()
     
     then: "they are correct"
-    recipeCreator.footerIndex == 16
+    recipeCreator.instructionsEndIndex == 15
     recipeCreator.ingredientsStartIndex == 5
+    recipeCreator.ingredientsEndIndex == 11
     recipeCreator.instructionsStartIndex == 12
   }
 
   def "Extract ingredient section from recipe raw text" () {
     given: "indices are set"
-    recipeCreator.identifyIngredientAndInstructionsIndices()
+    recipeCreator.identifyLineIndexes()
     
     when: "ingredients are extracted from the recipe"
     List<String> ingredients = recipeCreator.extractIngredients()
@@ -72,7 +84,7 @@ class RecipeCreatorSpec extends Specification {
 
   def "Extract instructions section from recipe raw text" () {
     given: "indices are set"
-    recipeCreator.identifyIngredientAndInstructionsIndices()
+    recipeCreator.identifyLineIndexes()
     
     when: "instructions are extracted from the recipe"
     String instructions = recipeCreator.extractInstructions()

@@ -1,4 +1,4 @@
-package org.grantharper.recipe.ocr;
+package org.grantharper.recipe.domain;
 
 import java.util.List;
 

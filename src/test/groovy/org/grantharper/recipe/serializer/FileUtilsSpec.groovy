@@ -1,4 +1,6 @@
-package org.grantharper.recipe.ocr
+package org.grantharper.recipe.serializer
+
+import org.grantharper.recipe.serializer.FileUtils
 
 import spock.lang.*
 

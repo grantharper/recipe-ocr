@@ -9,16 +9,17 @@ import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.List;
 
-import org.grantharper.recipe.ocr.FileUtils;
-import org.grantharper.recipe.ocr.HtmlCreator;
-import org.grantharper.recipe.ocr.HtmlCreatorImpl;
+import org.grantharper.recipe.domain.Recipe;
 import org.grantharper.recipe.ocr.OCRException;
 import org.grantharper.recipe.ocr.OCRExecutor;
 import org.grantharper.recipe.ocr.OCRExecutorImpl;
-import org.grantharper.recipe.ocr.OutputCreator;
-import org.grantharper.recipe.ocr.Recipe;
-import org.grantharper.recipe.ocr.RecipeCreator;
-import org.grantharper.recipe.ocr.RecipeJsonCreator;
+import org.grantharper.recipe.parser.RecipeParserAbstract;
+import org.grantharper.recipe.parser.RecipeParserSurLaTable;
+import org.grantharper.recipe.serializer.FileUtils;
+import org.grantharper.recipe.serializer.HtmlCreator;
+import org.grantharper.recipe.serializer.HtmlCreatorImpl;
+import org.grantharper.recipe.serializer.OutputCreator;
+import org.grantharper.recipe.serializer.RecipeJsonCreator;
 
 import net.sourceforge.tess4j.Tesseract;
 
@@ -58,7 +59,7 @@ public class Application
       
       String json;
       OutputCreator outputCreator = new RecipeJsonCreator();
-      Recipe recipe = new RecipeCreator(recipeText).convertTextToRecipe();
+      Recipe recipe = new RecipeParserSurLaTable().parse(recipeText);
       json = outputCreator.generateOutput(recipe);
       List<String> output = Arrays.asList(json);
       

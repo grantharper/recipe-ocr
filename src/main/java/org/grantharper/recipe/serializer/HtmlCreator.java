@@ -1,4 +1,4 @@
-package org.grantharper.recipe.ocr;
+package org.grantharper.recipe.serializer;
 
 import java.util.List;
 

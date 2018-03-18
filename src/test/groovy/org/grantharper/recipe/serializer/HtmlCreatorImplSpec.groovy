@@ -1,8 +1,8 @@
-package org.grantharper.recipe.ocr
+package org.grantharper.recipe.serializer
 
 import org.grantharper.recipe.Application
-import org.grantharper.recipe.ocr.HtmlCreator
-import org.grantharper.recipe.ocr.HtmlCreatorImpl
+import org.grantharper.recipe.serializer.HtmlCreator
+import org.grantharper.recipe.serializer.HtmlCreatorImpl
 
 class HtmlCreatorImplSpec extends spock.lang.Specification {
 

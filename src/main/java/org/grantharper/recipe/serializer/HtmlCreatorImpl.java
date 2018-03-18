@@ -1,4 +1,4 @@
-package org.grantharper.recipe.ocr;
+package org.grantharper.recipe.serializer;
 
 import java.io.IOException;
 import java.nio.file.Files;

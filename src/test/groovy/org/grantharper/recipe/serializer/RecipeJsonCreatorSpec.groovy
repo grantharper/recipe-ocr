@@ -1,4 +1,7 @@
-package org.grantharper.recipe.ocr
+package org.grantharper.recipe.serializer
+
+import org.grantharper.recipe.domain.Recipe
+import org.grantharper.recipe.serializer.RecipeJsonCreator
 
 import spock.lang.Specification
 
@@ -22,8 +25,7 @@ class RecipeJsonCreatorSpec extends Specification
     
     when: "recipe is marshalled into Json"
     String json = creator.generateOutput(recipe)
-    println json
-    
+        
     then: "json is created"
     json.contains("{")
     json.contains(recipe.title)
