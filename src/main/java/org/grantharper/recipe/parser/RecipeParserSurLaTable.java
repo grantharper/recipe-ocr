@@ -4,7 +4,7 @@ public class RecipeParserSurLaTable extends RecipeParserAbstract
 {
   
   private static final int YIELD_LENGTH = "Yield: ".length();
-  private static final String FOOTER_IDENTIFIER = "www.surla";
+  private static final String FOOTER_IDENTIFIER = "www.sur";
   public static final int MAX_INGREDIENT_LINE_LENGTH = 55;
   
   @Override
@@ -57,6 +57,9 @@ public class RecipeParserSurLaTable extends RecipeParserAbstract
         }
       }
 
+    }
+    if(this.instructionsEndIndex == null){
+      this.instructionsEndIndex = recipeLines.size() - 1;
     }
   }
 
