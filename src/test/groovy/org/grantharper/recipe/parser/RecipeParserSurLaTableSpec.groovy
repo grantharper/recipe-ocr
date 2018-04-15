@@ -1,6 +1,7 @@
 package org.grantharper.recipe.parser
 
 import java.nio.file.Path
+import java.util.stream.Collectors
 
 import static org.hamcrest.CoreMatchers.instanceOf
 
@@ -16,14 +17,15 @@ import spock.lang.Specification
 class RecipeParserSurLaTableSpec extends Specification {
   
   Path recipeTestFile
+  Path recipeTestFileNoFooter
   List<String> recipeLines
   String recipeText
   RecipeParserAbstract recipeCreator
   
   def setup() {
-    recipeTestFile = Paths.get("src/test/resources/sur-la-table-recipe.txt")
+    recipeTestFile = Paths.get("src/test/resources/sample-recipe.txt")
     recipeLines = Files.readAllLines(recipeTestFile, Charset.defaultCharset())
-    recipeText = recipeLines.stream().reduce("", {String a, String b -> a + b + "\n"})
+    recipeText = recipeLines.stream().collect(Collectors.joining("\n"));
     recipeCreator = new RecipeParserSurLaTable();
     recipeCreator.parseRecipeLines(recipeText);
   }
@@ -95,4 +97,5 @@ class RecipeParserSurLaTableSpec extends Specification {
     
     
   }
+
 }
