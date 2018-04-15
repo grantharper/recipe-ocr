@@ -1,7 +1,8 @@
 # All directories should end in / (information used by ide.gradle)
-img/
+data/
 tessdata/
-output/
+src/test/out/
+out/
 
 # Ant
 ant/

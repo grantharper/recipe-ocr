@@ -13,21 +13,21 @@ import javax.imageio.ImageIO;
 public class ImageConverter
 {
 
-  Path convertJpegToPng(Path jpegFile, Path outputDir) {
+  public Path convertJpegToPng(Path jpegFile, Path outputDir) {
     String pngFilename = FileUtils.changeJpegExtensionToPng(jpegFile.getFileName().toString());
     File outputFile = new File(outputDir.toString() + "/" + pngFilename);
 
-    try {
-      BufferedImage bufferedImage = ImageIO.read(jpegFile.toFile());
-      ImageIO.write(bufferedImage, "png", outputFile);
-    } catch (IOException e) {
-      e.printStackTrace();
-      throw new RuntimeException("image conversion failed");
+    if(!outputFile.exists()){ //skip processing if file has already been created previously
+      try {
+        BufferedImage bufferedImage = ImageIO.read(jpegFile.toFile());
+        ImageIO.write(bufferedImage, "png", outputFile);
+      } catch (IOException e) {
+        e.printStackTrace();
+        throw new RuntimeException("image conversion failed");
+      }
     }
 
     return outputFile.toPath();
   }
 
-
-  
 }
