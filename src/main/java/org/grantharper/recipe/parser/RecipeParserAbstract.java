@@ -39,12 +39,18 @@ public abstract class RecipeParserAbstract implements RecipeParser
   {
     parseRecipeLines(text);
     identifyLineIndexes();
+    String book = extractBook();
     String title = extractTitle();
     String servingSize = extractServingSize();
     List<String> ingredients = extractIngredients();
     String instructions = extractInstructions();
-    return new Recipe(title, servingSize, ingredients, instructions);
+    String pageId = extractPageId();
+    return new Recipe(book, title, pageId, servingSize, ingredients, instructions);
   }
+
+  protected abstract String extractBook();
+
+  protected abstract String extractPageId();
 
   protected String extractTitle()
   {

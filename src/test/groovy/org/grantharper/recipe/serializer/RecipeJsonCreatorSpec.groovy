@@ -10,10 +10,10 @@ class RecipeJsonCreatorSpec extends Specification
   
   RecipeJsonCreator creator = new RecipeJsonCreator()
   
-  List<String> ingredients = ["3 cups crumbled Greek feta","2/3 cup extra—virgin olive oil, plus more for serving",
+  List<String> ingredients = ["3 cups crumbled Greek feta","2/3 cup extraï¿½virgin olive oil, plus more for serving",
                               "Zest and juice of 1 lemon","Freshly ground black pepper"]
   
-  Recipe recipe = new Recipe("Whipped Feta with Grilled Pita Bread", 
+  Recipe recipe = new Recipe("Sur La Table","Whipped Feta with Grilled Pita Bread","2",
     "3 cups", 
     ingredients,
     "To prepare the spread: Place feta, olive oil, lemon zest, juice, and a few grinds of black pepper\n"
@@ -29,6 +29,7 @@ class RecipeJsonCreatorSpec extends Specification
     then: "json is created"
     json.contains("{")
     json.contains(recipe.title)
+    json.contains(recipe.pageId)
     
   }
 

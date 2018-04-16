@@ -2,10 +2,23 @@ package org.grantharper.recipe.parser;
 
 public class RecipeParserSurLaTable extends RecipeParserAbstract
 {
-  
+
   private static final int YIELD_LENGTH = "Yield: ".length();
   private static final String FOOTER_IDENTIFIER = "www.sur";
   public static final int MAX_INGREDIENT_LINE_LENGTH = 55;
+  public static final String BOOK_TITLE = "Sur La Table";
+
+  private final String pageId;
+
+  public RecipeParserSurLaTable(String fileName){
+    pageId = getPageNumberFromFileName(fileName);
+  }
+
+  private String getPageNumberFromFileName(String fileName)
+  {
+    int periodPosition = fileName.indexOf(".");
+    return fileName.substring(0,periodPosition);
+  }
   
   @Override
   protected String extractServingSize()
@@ -61,6 +74,18 @@ public class RecipeParserSurLaTable extends RecipeParserAbstract
     if(this.instructionsEndIndex == null){
       this.instructionsEndIndex = recipeLines.size() - 1;
     }
+  }
+
+  @Override
+  protected String extractPageId()
+  {
+    return pageId;
+  }
+
+  @Override
+  protected String extractBook()
+  {
+    return BOOK_TITLE;
   }
 
 }

@@ -76,7 +76,7 @@ public class Application
       Path pngImageFile = imageConverter.convertJpegToPng(imageFile, Paths.get(pngOutputDir));
       String recipeText = getTextFromImage(pngImageFile);
 
-      Recipe recipe = new RecipeParserSurLaTable().parse(recipeText);
+      Recipe recipe = new RecipeParserSurLaTable(pngImageFile.getFileName().toString()).parse(recipeText);
       String json = outputCreator.generateOutput(recipe);
       List<String> output = Arrays.asList(json);
       
