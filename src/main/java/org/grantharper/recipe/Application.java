@@ -81,7 +81,7 @@ public class Application
       List<String> output = Arrays.asList(json);
       
       Files.write(Paths.get(jsonOutputDir, FileUtils.changePngExtensionToJson(imageFile.getFileName()
-          .toString())), output, Charset.defaultCharset(), StandardOpenOption.CREATE);
+          .toString())), output, Charset.defaultCharset(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
     } catch (OCRException e)
     {
