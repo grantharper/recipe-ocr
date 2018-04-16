@@ -13,7 +13,7 @@ class OCRExecutorImplSpec extends Specification
   def "when Tesseract library fails, a runtime exception is thrown"() {
     given: "OCRExecutor with mocked Tesseract library"
     Tesseract tesseract = Stub(Tesseract)
-    tesseract.doOCR(_) >> {throw new TesseractException()}
+    tesseract.doOCR(_,_) >> {throw new TesseractException()}
     ocrExecutor = new OCRExecutorImpl(tesseract)
     
     when: "Tesseract failure"
@@ -24,5 +24,5 @@ class OCRExecutorImplSpec extends Specification
     
     
   }
-  
+
 }
