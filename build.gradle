@@ -1,5 +1,8 @@
 apply plugin: "groovy"
 apply plugin: "java"
+apply plugin: "application"
+
+mainClassName="org.grantharper.recipe.Application"
 
 version = "1.0-SNAPSHOT"
 description = "Recipe OCR"
