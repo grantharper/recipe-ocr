@@ -10,6 +10,7 @@ description = "Recipe OCR"
 sourceCompatibility = 1.8
 
 repositories {
+  mavenLocal()
   mavenCentral()
 }
 
@@ -21,7 +22,7 @@ dependencies {
   compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.4'
   // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
   compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.4'
-  
+  compile 'org.elasticsearch.client:elasticsearch-rest-high-level-client:6.2.3'
   
   
   // mandatory dependencies for using Spock

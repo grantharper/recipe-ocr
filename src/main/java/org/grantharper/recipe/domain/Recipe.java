@@ -5,12 +5,12 @@ import java.util.List;
 public class Recipe
 {
 
-  private final String book;
-  private final String title;
-  private final String pageId;
-  private final String servingSize;
-  private final List<String> ingredients;
-  private final String instructions;
+  private String book;
+  private String title;
+  private String pageId;
+  private String servingSize;
+  private List<String> ingredients;
+  private String instructions;
 
   public String getBook()
   {
@@ -52,6 +52,8 @@ public class Recipe
     this.ingredients = ingredients;
     this.instructions = instructions;
   }
+
+  public Recipe(){}
 
 
   @Override
