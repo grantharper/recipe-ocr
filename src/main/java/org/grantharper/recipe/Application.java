@@ -11,6 +11,7 @@ import org.grantharper.recipe.ocr.OCRExecutorImpl;
 import org.grantharper.recipe.parser.RecipeParserSurLaTable;
 import org.grantharper.recipe.serializer.*;
 
+import java.awt.*;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -35,6 +36,9 @@ public class Application
   private final String jpgInputDir = "data/input";
   private final String textOutputDir = "data/output/text";
   private final String htmlOutputDir = "data/output/html";
+
+  private final Rectangle originalRecipeRectangle = new Rectangle(150, 475, 2250, 2670);
+  private final Rectangle updatedRecipeRectangle = new Rectangle(150, 400, 2250, 2770);
 
   public static void main(String[] args)
   {
@@ -99,7 +103,7 @@ public class Application
       recipeText = Files.readAllLines(textRepresentationFilePath)
               .stream().collect(Collectors.joining("\n"));
     }else{
-      recipeText = ocr.performOCR(pngImageFile);
+      recipeText = ocr.performTargetedOCR(pngImageFile, updatedRecipeRectangle);
       writeOcrResultToTextFile(recipeText, pngImageFile);
     }
 

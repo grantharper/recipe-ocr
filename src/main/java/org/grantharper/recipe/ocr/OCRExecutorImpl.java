@@ -12,7 +12,6 @@ public class OCRExecutorImpl implements OCRExecutor
 {
   private static final String TESS_RESOURCES_FOLDER = "tessdata";
   private final Tesseract tesseract;
-  private final Rectangle targetRecipeRectangle = new Rectangle(150, 475, 2250, 2670);
 
   public OCRExecutorImpl(Tesseract tesseract)
   {
@@ -24,11 +23,22 @@ public class OCRExecutorImpl implements OCRExecutor
   public String performOCR(Path filePath)
   {
     try {
-      return tesseract.doOCR(filePath.toFile(), targetRecipeRectangle);
+      return tesseract.doOCR(filePath.toFile());
     }catch(TesseractException e) {
       throw new OCRException(e);
     }
     
   }
+
+  @Override
+  public String performTargetedOCR(Path filePath, Rectangle targetedRectangle) throws OCRException
+  {
+    try {
+      return tesseract.doOCR(filePath.toFile(), targetedRectangle);
+    }catch(TesseractException e) {
+      throw new OCRException(e);
+    }
+  }
+
 
 }

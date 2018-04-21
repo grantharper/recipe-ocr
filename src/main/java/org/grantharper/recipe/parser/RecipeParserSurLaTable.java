@@ -5,7 +5,7 @@ public class RecipeParserSurLaTable extends RecipeParserAbstract
 
   private static final int YIELD_LENGTH = "Yield: ".length();
   private static final String FOOTER_IDENTIFIER = "www.sur";
-  public static final int MAX_INGREDIENT_LINE_LENGTH = 55;
+  public static final int MAX_INGREDIENT_LINE_LENGTH = 90;
   public static final String BOOK_TITLE = "Sur La Table";
 
   private final String pageId;
@@ -57,7 +57,7 @@ public class RecipeParserSurLaTable extends RecipeParserAbstract
       } 
       else if(!foundInstructionsStart)
       {
-        if (line.length() > MAX_INGREDIENT_LINE_LENGTH)
+        if (line.contains(".") || line.length() > MAX_INGREDIENT_LINE_LENGTH)
         {
           this.ingredientsEndIndex = lineIndex - 1;
           foundInstructionsStart = true;
