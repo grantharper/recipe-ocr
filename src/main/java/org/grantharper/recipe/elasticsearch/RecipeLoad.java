@@ -25,14 +25,9 @@ public class RecipeLoad
   private ObjectMapper objectMapper;
 
   @Autowired
-  public void setElasticSearchClient(ElasticSearchClient elasticSearchClient)
+  public RecipeLoad(ElasticSearchClient elasticSearchClient, ObjectMapper objectMapper)
   {
     this.elasticSearchClient = elasticSearchClient;
-  }
-
-  @Autowired
-  public void setObjectMapper(ObjectMapper objectMapper)
-  {
     this.objectMapper = objectMapper;
   }
 

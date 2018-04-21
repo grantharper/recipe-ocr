@@ -23,8 +23,7 @@ public class ElasticSearchClient
   private RestHighLevelClient elasticClient;
 
   @Autowired
-  public void setElasticClient(RestHighLevelClient elasticClient)
-  {
+  public ElasticSearchClient(RestHighLevelClient elasticClient){
     this.elasticClient = elasticClient;
   }
 

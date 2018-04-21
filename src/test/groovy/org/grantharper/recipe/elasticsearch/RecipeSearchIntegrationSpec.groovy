@@ -27,7 +27,7 @@ class RecipeSearchIntegrationSpec extends Specification
 
   def "search recipe index"() {
     when: "recipe index is searched"
-    SearchHits searchHits = recipeSearch.searchByIngredient("flour")
+    SearchHits searchHits = recipeSearch.searchRecipeIndexByIngredients("flour")
 
     then: "recipe is found"
     searchHits.hits != null
