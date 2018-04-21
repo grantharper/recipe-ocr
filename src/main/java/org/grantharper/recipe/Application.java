@@ -1,5 +1,16 @@
 package org.grantharper.recipe;
 
+import net.sourceforge.tess4j.Tesseract;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.grantharper.imageconversion.ImageConverter;
+import org.grantharper.recipe.domain.Recipe;
+import org.grantharper.recipe.ocr.OCRException;
+import org.grantharper.recipe.ocr.OCRExecutor;
+import org.grantharper.recipe.ocr.OCRExecutorImpl;
+import org.grantharper.recipe.parser.RecipeParserSurLaTable;
+import org.grantharper.recipe.serializer.*;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -10,23 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.grantharper.imageconversion.ImageConverter;
-import org.grantharper.recipe.domain.Recipe;
-import org.grantharper.recipe.ocr.OCRException;
-import org.grantharper.recipe.ocr.OCRExecutor;
-import org.grantharper.recipe.ocr.OCRExecutorImpl;
-import org.grantharper.recipe.parser.RecipeParserAbstract;
-import org.grantharper.recipe.parser.RecipeParserSurLaTable;
-import org.grantharper.recipe.serializer.FileUtils;
-import org.grantharper.recipe.serializer.HtmlCreator;
-import org.grantharper.recipe.serializer.HtmlCreatorImpl;
-import org.grantharper.recipe.serializer.OutputCreator;
-import org.grantharper.recipe.serializer.RecipeJsonCreator;
-
-import net.sourceforge.tess4j.Tesseract;
-
 public class Application
 {
+
+  private static final Logger logger = LogManager.getLogger(Application.class);
 
   private OCRExecutor ocr = new OCRExecutorImpl(new Tesseract());
   private OutputCreator outputCreator = new RecipeJsonCreator();
@@ -40,7 +38,7 @@ public class Application
 
   public static void main(String[] args)
   {
-    System.out.println("OCR App Running");
+    logger.info("OCR App Running");
     Application app = new Application();
     app.executeOCRLoop();
 
@@ -59,8 +57,7 @@ public class Application
               .forEach(this::performOCR);
     } catch (IOException e)
     {
-      System.out.println("Input/Output directory problem");
-      e.printStackTrace();
+      logger.error("Input/Output directory problem", e);
     }
 
   }
@@ -72,7 +69,7 @@ public class Application
 
     try
     {
-
+      logger.info("processing " + imageFile.getFileName().toString());
       Path pngImageFile = imageConverter.convertJpegToPng(imageFile, Paths.get(pngOutputDir));
       String recipeText = getTextFromImage(pngImageFile);
 
@@ -81,22 +78,23 @@ public class Application
       List<String> output = Arrays.asList(json);
       
       Files.write(Paths.get(jsonOutputDir, FileUtils.changePngExtensionToJson(imageFile.getFileName()
-          .toString())), output, Charset.defaultCharset(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+          .toString())), output, Charset.defaultCharset(),
+              StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
     } catch (OCRException e)
     {
-      System.out.println("Error with OCR processing: " + imageFile);
-      e.printStackTrace();
+      logger.error("Error with OCR processing: " + imageFile, e);
     } catch (IOException e)
     {
-      System.out.println("Json file generation failed");
-      e.printStackTrace();
+      logger.error("Json file generation failed", e);
     }
   }
 
   String getTextFromImage(Path pngImageFile) throws IOException{
     String recipeText;
-    Path textRepresentationFilePath = Paths.get(textOutputDir, FileUtils.changePngExtensionToTxt(pngImageFile.getFileName().toString()));
+    Path textRepresentationFilePath = Paths.get(textOutputDir,
+            FileUtils.changePngExtensionToTxt(pngImageFile.getFileName().toString()));
+
     if(textRepresentationFilePath.toFile().exists()){
       recipeText = Files.readAllLines(textRepresentationFilePath)
               .stream().collect(Collectors.joining("\n"));
@@ -111,7 +109,8 @@ public class Application
   void writeOcrResultToTextFile(String recipeText, Path imageFile) throws IOException
   {
     Files.write(Paths.get(textOutputDir, FileUtils.changePngExtensionToTxt(imageFile.getFileName()
-        .toString())), Arrays.asList(recipeText), Charset.defaultCharset(), StandardOpenOption.CREATE);
+        .toString())), Arrays.asList(recipeText), Charset.defaultCharset(),
+            StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
   }
 
   void writeOcrResultToHtml(String recipeText, Path imageFile) throws IOException
@@ -123,7 +122,7 @@ public class Application
     String htmlFilename = FileUtils.changePngExtensionToHtml(imageFile.getFileName()
         .toString());
 
-    Files.write(Paths.get(htmlOutputDir, htmlFilename), htmlPage, StandardOpenOption.CREATE);
+    Files.write(Paths.get(htmlOutputDir, htmlFilename), htmlPage, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
   }
 
 }
