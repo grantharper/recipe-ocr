@@ -2,7 +2,7 @@
 
 This project was built to perform optical character recognition for the purpose of importing recipes into the [recipe-index](https://github.com/grantharper/recipe-index) app
 
-## Build
+## OCR Setup and Build
 
 Copy in the Tesseract data into the tessdata directory. This data can be found [here](https://github.com/tesseract-ocr/tessdata/tree/3.04.00)
 
@@ -15,6 +15,10 @@ To execute the data pipeline and translate jpeg recipe images into json document
 Assumptions:
 * This application is currently only build to use the `RecipeParserSurLaTable`
 * Files must be named according to the pageId that is desired in the elasticsearch index
+
+The mid-pipeline text output will be sent to the `data/output/text` directory (e.g. 45.txt). Make sure to review this information since the OCR has a tendency to pick up extra notes and splotches as characters which will then show up in the recipe json.
+
+Once you have edited the txt files, run the application again. For any image file that already has a corresponding text file, the image will not go through OCR again. The parser will simply read in the existing text file and translate that to json.
 
 The output will be sent to the `data/output/json` directory (e.g. 45.json)
 
