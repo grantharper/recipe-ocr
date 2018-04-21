@@ -20,6 +20,7 @@ public class ElasticSearchLoader
 {
 
   private static final String RECIPE_INDEX_NAME = "recipe";
+  public static final String TYPE = "doc";
   private RestHighLevelClient elasticClient;
   private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -40,7 +41,7 @@ public class ElasticSearchLoader
   void loadRecipeJson(String pathname){
 
     try {
-      IndexRequest indexRequest = new IndexRequest(RECIPE_INDEX_NAME, "json");
+      IndexRequest indexRequest = new IndexRequest(RECIPE_INDEX_NAME, TYPE);
       Recipe recipe = objectMapper.readValue(new File(pathname), Recipe.class);
       String jsonString = objectMapper.writeValueAsString(recipe);
       indexRequest.source(jsonString, XContentType.JSON);

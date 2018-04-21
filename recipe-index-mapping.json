@@ -1,0 +1,14 @@
+{
+  "mappings": {
+    "doc": {
+      "properties": {
+        "book": {"type": "keyword"},
+        "title": {"type": "text"},
+        "pageId": {"type": "keyword"},
+        "servingSize": {"type": "text"},
+        "ingredients": {"type": "text"},
+        "instructions": {"type": "text"}
+      }
+    }
+  }
+}

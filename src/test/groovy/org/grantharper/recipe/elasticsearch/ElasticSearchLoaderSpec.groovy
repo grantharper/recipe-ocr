@@ -23,6 +23,14 @@ class ElasticSearchLoaderSpec extends Specification
     true == true
   }
 
+  def "search recipe index"() {
+    when: "recipe index is searched"
+    elasticSearchLoader.searchForRecipeByIngredientName()
+
+    then: "recipe is found"
+    true == true
+  }
+
 
 
 }
