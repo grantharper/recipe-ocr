@@ -9,10 +9,13 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.grantharper.recipe.domain.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
+@Component
 public class RecipeLoad
 {
 
@@ -31,6 +34,10 @@ public class RecipeLoad
   public void setObjectMapper(ObjectMapper objectMapper)
   {
     this.objectMapper = objectMapper;
+  }
+
+  public void loadRecipeJson(Path jsonFilename){
+    loadRecipeJson(jsonFilename.toString());
   }
 
   IndexResponse loadRecipeJson(String pathname){

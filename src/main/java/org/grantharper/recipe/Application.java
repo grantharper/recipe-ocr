@@ -31,14 +31,16 @@ public class Application
   private OutputCreator outputCreator = new RecipeJsonCreator();
   private ImageConverter imageConverter = new ImageConverter();
 
-  private final String pngOutputDir = "data/output/png";
-  private final String jsonOutputDir = "data/output/json";
-  private final String jpgInputDir = "data/input";
-  private final String textOutputDir = "data/output/text";
-  private final String htmlOutputDir = "data/output/html";
+  public static final String pngOutputDir = "data/output/png";
+  public static final String jsonOutputDir = "data/output/json";
+  public static final String jpgInputDir = "data/input";
+  public static final String textOutputDir = "data/output/text";
+  public static final String htmlOutputDir = "data/output/html";
 
   private final Rectangle originalRecipeRectangle = new Rectangle(150, 475, 2250, 2670);
   private final Rectangle updatedRecipeRectangle = new Rectangle(150, 400, 2250, 2770);
+
+
 
   public static void main(String[] args)
   {
@@ -109,6 +111,8 @@ public class Application
 
     return recipeText;
   }
+
+
 
   void writeOcrResultToTextFile(String recipeText, Path imageFile) throws IOException
   {
