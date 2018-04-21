@@ -9,6 +9,10 @@ description = "Recipe OCR"
 
 sourceCompatibility = 1.8
 
+test {
+  exclude '**/*Integration*'
+}
+
 repositories {
   mavenLocal()
   mavenCentral()
@@ -23,7 +27,8 @@ dependencies {
   // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
   compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.4'
   compile 'org.elasticsearch.client:elasticsearch-rest-high-level-client:6.2.3'
-  
+  compile 'org.springframework:spring-context:5.0.5.RELEASE'
+  compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.1'
   
   // mandatory dependencies for using Spock
   compile "org.codehaus.groovy:groovy-all:2.4.13"
