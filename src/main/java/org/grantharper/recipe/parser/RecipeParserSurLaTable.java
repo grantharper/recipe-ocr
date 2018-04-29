@@ -5,8 +5,8 @@ public class RecipeParserSurLaTable extends RecipeParserAbstract
 
   private static final int YIELD_LENGTH = "Yield: ".length();
   private static final String FOOTER_IDENTIFIER = "www.sur";
-  public static final int MAX_INGREDIENT_LINE_LENGTH = 90;
-  public static final String BOOK_TITLE = "Sur La Table";
+  private static final int MAX_INGREDIENT_LINE_LENGTH = 90;
+  private static final String BOOK_TITLE = "Sur La Table";
 
   private final String pageId;
 
@@ -21,7 +21,7 @@ public class RecipeParserSurLaTable extends RecipeParserAbstract
   }
   
   @Override
-  protected String extractServingSize()
+  public String extractServingSize()
   {
     if(this.servingSizeIndex == null) {
       throw new IllegalStateException("Cannot extract serving size before indices are set");
@@ -31,8 +31,9 @@ public class RecipeParserSurLaTable extends RecipeParserAbstract
     // the recipe text always says Yield: <serving size>
     return fullServingSizeLine.substring(YIELD_LENGTH, fullServingSizeLine.length());
   }
-  
-  protected void identifyLineIndexes()
+
+  @Override
+  public void identifyLineIndexes()
   {
 
     //assumption is that the first line of the text is the title
@@ -77,13 +78,13 @@ public class RecipeParserSurLaTable extends RecipeParserAbstract
   }
 
   @Override
-  protected String extractPageId()
+  public String extractPageId()
   {
     return pageId;
   }
 
   @Override
-  protected String extractBook()
+  public String extractBook()
   {
     return BOOK_TITLE;
   }
