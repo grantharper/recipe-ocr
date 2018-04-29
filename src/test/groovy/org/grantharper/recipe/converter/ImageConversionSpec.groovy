@@ -20,7 +20,7 @@ class ImageConversionSpec extends Specification
     Files.createDirectories(Paths.get("build"))
 
     when: "image converter is executed"
-    Path pngFile = imageConverter.convertJpegToPng(jpegFile, outputDir)
+    Path pngFile = imageConverter.convert(jpegFile, outputDir)
     
     
     then: "png file is created"
