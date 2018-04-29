@@ -18,8 +18,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-@Configuration
-@ComponentScan
 public class SearchElasticsearchApp
 {
 

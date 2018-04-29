@@ -1,14 +1,10 @@
 package org.grantharper.recipe.serializer
 
-import org.grantharper.recipe.Application
-import org.grantharper.recipe.serializer.HtmlCreator
-import org.grantharper.recipe.serializer.HtmlCreatorImpl
-
 class HtmlCreatorImplSpec extends spock.lang.Specification {
 
   def multiLineString = '''
                         Title
-                        2/3 cup extra—virgin olive oil, plus more for serving 
+                        2/3 cup extraï¿½virgin olive oil, plus more for serving 
                         Zest and juice of 1 lemon
                         Freshly ground black pepper
                         1 teaspoon zaatar
@@ -79,6 +75,6 @@ class HtmlCreatorImplSpec extends spock.lang.Specification {
 
     then: "output has the title at the top"
     output.get(0) == "<div class='ocr-title'>Title</div>"
-    output.get(1) == "<div class='ocr-recipe'>2/3 cup extra—virgin olive oil, plus more for serving</div>"
+    output.get(1) == "<div class='ocr-recipe'>2/3 cup extraï¿½virgin olive oil, plus more for serving</div>"
   }
 }

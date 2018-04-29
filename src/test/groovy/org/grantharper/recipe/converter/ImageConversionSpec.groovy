@@ -1,4 +1,4 @@
-package org.grantharper.imageconversion
+package org.grantharper.recipe.converter
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
@@ -14,7 +14,7 @@ class ImageConversionSpec extends Specification
   def "converts jpeg file into a png file" () {
     
     given: "image converter and jpeg file and output directory"
-    ImageConverter imageConverter = new ImageConverter()
+    JpegToPngConverter imageConverter = new JpegToPngConverter()
     Path jpegFile = Paths.get("src/test/resources/sample.jpg")
     Path outputDir = Paths.get("build")
     Files.createDirectories(Paths.get("build"))

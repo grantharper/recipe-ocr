@@ -1,29 +1,27 @@
 package org.grantharper.recipe.serializer;
 
-import java.nio.file.Path;
-
 public class FileUtils
 {
   
   private FileUtils() {}
 
-  public static String changePngExtensionToHtml(String pngFilename)
+  public static String changeFileExtensionToHtml(String pngFilename)
   {
-    return changePngExtensionToOtherExtension(pngFilename, ".html");
+    return changeFileExtensionToOtherExtension(pngFilename, ".html");
   }
   
-  public static String changePngExtensionToTxt(String pngFilename)
+  public static String changeFileExtensionToTxt(String pngFilename)
   {
-    return changePngExtensionToOtherExtension(pngFilename, ".txt");
+    return changeFileExtensionToOtherExtension(pngFilename, ".txt");
   }
 
-  public static String changePngExtensionToJson(String pngFilename)
+  public static String changeFileExtensionToJson(String pngFilename)
   {
-    return changePngExtensionToOtherExtension(pngFilename, ".json");
+    return changeFileExtensionToOtherExtension(pngFilename, ".json");
   }
   
-  private static String changePngExtensionToOtherExtension(String pngFilename, String otherExtension) {
-    return pngFilename.substring(0, pngFilename.length() -4) + otherExtension;
+  private static String changeFileExtensionToOtherExtension(String originalFilename, String otherExtension) {
+    return originalFilename.substring(0, originalFilename.length() -4) + otherExtension;
   }
 
   public static String changeJpegExtensionToPng(String jpegFilename)
