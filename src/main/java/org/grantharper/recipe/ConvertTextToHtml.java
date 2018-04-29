@@ -3,6 +3,7 @@ package org.grantharper.recipe;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.grantharper.recipe.serializer.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,11 +18,27 @@ public class ConvertTextToHtml
 
   private static final Logger logger = LogManager.getLogger(ConvertTextToHtml.class);
 
+  private String htmlOutputDir;
+  private String txtOutputDir;
+
+  @Value("${outputDir.html}")
+  void setHtmlOutputDir(String htmlOutputDir)
+  {
+    this.htmlOutputDir = htmlOutputDir;
+  }
+
+  @Value("${outputDir.txt}")
+  void setTxtOutputDir(String txtOutputDir)
+  {
+    this.txtOutputDir = txtOutputDir;
+  }
+
+
   public void execute()
   {
     try {
-      Files.createDirectories(Paths.get(AppConfig.HTML_OUTPUT_DIR));
-      Files.list(Paths.get(AppConfig.TEXT_OUTPUT_DIR))
+      Files.createDirectories(Paths.get(this.htmlOutputDir));
+      Files.list(Paths.get(this.txtOutputDir))
               .filter(p -> p.getFileName()
                       .toString()
                       .endsWith(".txt"))
@@ -47,7 +64,7 @@ public class ConvertTextToHtml
       String htmlFilename = FileUtils.changeFileExtensionToHtml(textFile.getFileName()
               .toString());
 
-      Files.write(Paths.get(AppConfig.HTML_OUTPUT_DIR, htmlFilename), htmlPage, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+      Files.write(Paths.get(this.htmlOutputDir, htmlFilename), htmlPage, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     } catch (IOException e) {
       e.printStackTrace();
     }

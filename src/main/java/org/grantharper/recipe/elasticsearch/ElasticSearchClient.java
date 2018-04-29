@@ -8,6 +8,7 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,10 +18,16 @@ public class ElasticSearchClient
 {
 
   private static final Logger logger = LogManager.getLogger(ElasticSearchClient.class);
-  public static final String RECIPE_INDEX_NAME = "recipe";
-  public static final String TYPE = "doc";
+
+  private String recipeIndexName;
 
   private RestHighLevelClient elasticClient;
+
+  @Value("${elasticsearch.index.name}")
+  public void setRecipeIndexName(String recipeIndexName)
+  {
+    this.recipeIndexName = recipeIndexName;
+  }
 
   @Autowired
   public ElasticSearchClient(RestHighLevelClient elasticClient){

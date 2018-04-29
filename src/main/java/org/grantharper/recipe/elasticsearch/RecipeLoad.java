@@ -9,6 +9,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.grantharper.recipe.domain.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -23,6 +24,21 @@ public class RecipeLoad
 
   private ElasticSearchClient elasticSearchClient;
   private ObjectMapper objectMapper;
+
+  private String recipeIndexName;
+  private String recipeIndexType;
+
+  @Value("${elasticsearch.index.name}")
+  void setRecipeIndexName(String recipeIndexName)
+  {
+    this.recipeIndexName = recipeIndexName;
+  }
+
+  @Value("${elasticsearch.index.type}")
+  void setRecipeIndexType(String recipeIndexType)
+  {
+    this.recipeIndexType = recipeIndexType;
+  }
 
   @Autowired
   public RecipeLoad(ElasticSearchClient elasticSearchClient, ObjectMapper objectMapper)
@@ -51,7 +67,7 @@ public class RecipeLoad
     String uniqueId = recipe.getBook().replace(" ", "") + recipe.getPageId();
 
     IndexRequest indexRequest = new IndexRequest(
-            ElasticSearchClient.RECIPE_INDEX_NAME, ElasticSearchClient.TYPE,
+            this.recipeIndexName, this.recipeIndexType,
             uniqueId);
     indexRequest.source(jsonString, XContentType.JSON);
     IndexResponse indexResponse = elasticSearchClient.performIndexLoad(indexRequest);

@@ -19,6 +19,8 @@ class RecipeLoadIntegrationSpec extends Specification
             RestClient.builder(new HttpHost("localhost", 9200, "http"),
                     new HttpHost("localhost", 9201, "http"))))
     recipeLoad = new RecipeLoad(elasticSearchClient, new ObjectMapper())
+    recipeLoad.setRecipeIndexName("recipe-test")
+    recipeLoad.setRecipeIndexType("doc")
 
   }
 

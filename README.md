@@ -32,6 +32,10 @@ Create the index mapping using `recipe-index-mapping.json`
 
 Run the LoadElasticSearchApp class to load all of the files in the `data/output/json` directory to the index
 
+To delete the index
+
+`curl -X DELETE localhost:9200/recipe`
+
 ## Elasticsearch Searches
 
 Below are a few searches that should return some results and illustrate the intention of the index to be able to locate recipes based on their ingredients

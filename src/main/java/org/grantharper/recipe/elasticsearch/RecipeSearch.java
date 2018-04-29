@@ -11,6 +11,7 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -24,6 +25,14 @@ public class RecipeSearch
   private static final Logger logger = LogManager.getLogger(RecipeSearch.class);
 
   private ElasticSearchClient elasticSearchClient;
+
+  private String recipeIndexName;
+
+  @Value("${elasticsearch.index.name}")
+  void setRecipeIndexName(String recipeIndexName)
+  {
+    this.recipeIndexName = recipeIndexName;
+  }
 
   @Autowired
   public RecipeSearch(ElasticSearchClient elasticSearchClient)
@@ -51,7 +60,7 @@ public class RecipeSearch
   }
 
   SearchHits searchRecipeIndexByIngredients(String ingredientSearch){
-    SearchRequest searchRequest = new SearchRequest(ElasticSearchClient.RECIPE_INDEX_NAME);
+    SearchRequest searchRequest = new SearchRequest(this.recipeIndexName);
     SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
     searchSourceBuilder.query(createIngredientQuery(ingredientSearch));
     searchRequest.source(searchSourceBuilder);
@@ -74,7 +83,7 @@ public class RecipeSearch
   }
 
   void finalAllRecipes(){
-    SearchRequest searchRequest = new SearchRequest(ElasticSearchClient.RECIPE_INDEX_NAME);
+    SearchRequest searchRequest = new SearchRequest(this.recipeIndexName);
     SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
     searchSourceBuilder.query(QueryBuilders.matchAllQuery());
     searchRequest.source(searchSourceBuilder);

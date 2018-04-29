@@ -9,18 +9,14 @@ import org.grantharper.recipe.ocr.OCRExecutor;
 import org.grantharper.recipe.ocr.OCRExecutorImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import java.awt.*;
 
 @Configuration
+@PropertySource("classpath:application.properties")
 public class AppConfig
 {
-
-  public static final String PNG_OUTPUT_DIR = "data/output/png";
-  public static final String JSON_OUTPUT_DIR = "data/output/json";
-  public static final String JPG_INPUT_DIR = "data/input";
-  public static final String TEXT_OUTPUT_DIR = "data/output/text";
-  public static final String HTML_OUTPUT_DIR = "data/output/html";
 
   @Bean
   public Rectangle getRecipeViewport()

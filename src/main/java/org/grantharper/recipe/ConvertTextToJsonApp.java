@@ -7,6 +7,7 @@ import org.grantharper.recipe.parser.RecipeParserSurLaTable;
 import org.grantharper.recipe.serializer.FileUtils;
 import org.grantharper.recipe.serializer.RecipeJsonCreator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -27,6 +28,21 @@ public class ConvertTextToJsonApp
 
   private final RecipeJsonCreator recipeJsonCreator;
 
+  private String jsonOutputDir;
+  private String txtOutputDir;
+
+  @Value("${outputDir.json}")
+  void setJsonOutputDir(String jsonOutputDir)
+  {
+    this.jsonOutputDir = jsonOutputDir;
+  }
+
+  @Value("${outputDir.txt}")
+  void setTxtOutputDir(String txtOutputDir)
+  {
+    this.txtOutputDir = txtOutputDir;
+  }
+
   @Autowired
   public ConvertTextToJsonApp(RecipeJsonCreator recipeJsonCreator)
   {
@@ -36,8 +52,8 @@ public class ConvertTextToJsonApp
   public void execute()
   {
     try {
-      Files.createDirectories(Paths.get(AppConfig.JSON_OUTPUT_DIR));
-      Files.list(Paths.get(AppConfig.TEXT_OUTPUT_DIR))
+      Files.createDirectories(Paths.get(this.jsonOutputDir));
+      Files.list(Paths.get(this.txtOutputDir))
               .filter(p -> p.getFileName()
                       .toString()
                       .endsWith(".txt"))
@@ -59,7 +75,7 @@ public class ConvertTextToJsonApp
       String json = recipeJsonCreator.generateOutput(recipe);
       List<String> output = Arrays.asList(json);
 
-      Files.write(Paths.get(AppConfig.JSON_OUTPUT_DIR, FileUtils.changeFileExtensionToJson(textFile.getFileName()
+      Files.write(Paths.get(this.jsonOutputDir, FileUtils.changeFileExtensionToJson(textFile.getFileName()
                       .toString())), output, Charset.defaultCharset(),
               StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 

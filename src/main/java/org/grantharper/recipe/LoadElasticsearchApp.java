@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.grantharper.recipe.elasticsearch.RecipeLoad;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,6 +19,13 @@ public class LoadElasticsearchApp
   private static final Logger logger = LogManager.getLogger(LoadElasticsearchApp.class);
 
   private final RecipeLoad recipeLoad;
+  private String jsonOutputDir;
+
+  @Value("${outputDir.json}")
+  void setJsonOutputDir(String jsonOutputDir)
+  {
+    this.jsonOutputDir = jsonOutputDir;
+  }
 
   @Autowired
   public LoadElasticsearchApp(RecipeLoad recipeLoad)
@@ -28,7 +36,7 @@ public class LoadElasticsearchApp
   void execute()
   {
     try {
-      Files.list(Paths.get(AppConfig.JSON_OUTPUT_DIR))
+      Files.list(Paths.get(this.jsonOutputDir))
               .filter(p -> p.getFileName()
                       .toString()
                       .endsWith(".json"))
