@@ -14,10 +14,11 @@ class OCRExecutorImplSpec extends Specification
     given: "OCRExecutor with mocked Tesseract library"
     Tesseract tesseract = Stub(Tesseract)
     tesseract.doOCR(_,_) >> {throw new TesseractException()}
+    tesseract.doOCR(_) >> {throw new TesseractException()}
     ocrExecutor = new OCRExecutorImpl(tesseract)
     
     when: "Tesseract failure"
-    ocrExecutor.performOCR(Paths.get(""))
+    ocrExecutor.performTargetedOCR(Paths.get(""), null)
     
     then: "An OCR Exception is thrown"
     thrown OCRException

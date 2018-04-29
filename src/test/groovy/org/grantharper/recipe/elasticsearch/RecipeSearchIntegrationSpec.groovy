@@ -12,13 +12,11 @@ class RecipeSearchIntegrationSpec extends Specification
   RecipeSearch recipeSearch
 
   def setup() {
-    recipeSearch = new RecipeSearch()
-    elasticSearchClient = new ElasticSearchClient()
-    elasticSearchClient.setElasticClient(new RestHighLevelClient(
+    elasticSearchClient = new ElasticSearchClient(new RestHighLevelClient(
             RestClient.builder(new HttpHost("localhost", 9200, "http"),
-                    new HttpHost("localhost", 9201, "http")))
-    )
-    recipeSearch.setElasticSearchClient(elasticSearchClient)
+                    new HttpHost("localhost", 9201, "http"))))
+    recipeSearch = new RecipeSearch(elasticSearchClient)
+
   }
 
   def cleanup() {
@@ -31,7 +29,7 @@ class RecipeSearchIntegrationSpec extends Specification
 
     then: "recipe is found"
     searchHits.hits != null
-    searchHits.hits.length == 1
+    searchHits.hits.length >= 1
   }
 
 }

@@ -31,7 +31,7 @@ public class OCRExecutorImpl implements OCRExecutor
   }
 
   @Override
-  public String performTargetedOCR(Path filePath, Rectangle targetedRectangle) throws OCRException
+  public String performTargetedOCR(Path filePath, Rectangle targetedRectangle)
   {
     try {
       return tesseract.doOCR(filePath.toFile(), targetedRectangle);

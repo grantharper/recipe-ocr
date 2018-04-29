@@ -15,14 +15,11 @@ class RecipeLoadIntegrationSpec extends Specification
   RecipeLoad recipeLoad
 
   def setup() {
-    recipeLoad = new RecipeLoad()
-    elasticSearchClient = new ElasticSearchClient()
-    elasticSearchClient.setElasticClient(new RestHighLevelClient(
+    elasticSearchClient = new ElasticSearchClient(new RestHighLevelClient(
             RestClient.builder(new HttpHost("localhost", 9200, "http"),
-                    new HttpHost("localhost", 9201, "http")))
-    )
-    recipeLoad.setElasticSearchClient(elasticSearchClient)
-    recipeLoad.setObjectMapper(new ObjectMapper())
+                    new HttpHost("localhost", 9201, "http"))))
+    recipeLoad = new RecipeLoad(elasticSearchClient, new ObjectMapper())
+
   }
 
   def cleanup() {
@@ -31,9 +28,9 @@ class RecipeLoadIntegrationSpec extends Specification
 
   def "write recipe to the recipe index"() {
     when: "recipe json is written to the recipe index"
-    IndexResponse indexResponse = recipeLoad.loadRecipeJson("data/output/json/201.json")
+    IndexResponse indexResponse = recipeLoad.loadRecipeJson("src/test/resources/sample-recipe.json")
 
-    then: "recipe json is queryable"
+    then: "response is successful"
     indexResponse.status() == RestStatus.OK
   }
 

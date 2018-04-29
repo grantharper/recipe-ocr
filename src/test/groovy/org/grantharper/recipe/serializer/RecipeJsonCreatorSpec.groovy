@@ -1,5 +1,6 @@
 package org.grantharper.recipe.serializer
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.grantharper.recipe.domain.Recipe
 import org.grantharper.recipe.serializer.RecipeJsonCreator
 
@@ -8,7 +9,7 @@ import spock.lang.Specification
 class RecipeJsonCreatorSpec extends Specification
 {
   
-  RecipeJsonCreator creator = new RecipeJsonCreator()
+  RecipeJsonCreator creator = new RecipeJsonCreator(new ObjectMapper())
   
   List<String> ingredients = ["3 cups crumbled Greek feta","2/3 cup extra�virgin olive oil, plus more for serving",
                               "Zest and juice of 1 lemon","Freshly ground black pepper"]
