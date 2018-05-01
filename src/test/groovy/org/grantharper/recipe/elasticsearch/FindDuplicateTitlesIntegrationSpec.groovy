@@ -12,7 +12,7 @@ import org.elasticsearch.search.SearchHits
 import org.elasticsearch.search.builder.SearchSourceBuilder
 import spock.lang.Specification
 
-class FindDuplicateTitles extends Specification
+class FindDuplicateTitlesIntegrationSpec extends Specification
 {
 
   RestHighLevelClient restHighLevelClient;
