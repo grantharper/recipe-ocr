@@ -34,7 +34,7 @@ public class ConvertTextToHtml
   }
 
 
-  public void execute()
+  public void convertDirectory()
   {
     try {
       Files.createDirectories(Paths.get(this.htmlOutputDir));
@@ -42,14 +42,14 @@ public class ConvertTextToHtml
               .filter(p -> p.getFileName()
                       .toString()
                       .endsWith(".txt"))
-              .forEach(this::writeOcrResultToHtml);
+              .forEach(this::convertFile);
     } catch (IOException e) {
       logger.error("Input/Output directory problem", e);
     }
 
   }
 
-  void writeOcrResultToHtml(Path textFile)
+  void convertFile(Path textFile)
   {
 
     try {

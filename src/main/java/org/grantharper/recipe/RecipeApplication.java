@@ -60,19 +60,19 @@ public class RecipeApplication
   void runImageConversion()
   {
     logger.info("executing conversion of images to text");
-    this.convertImageToTextApp.execute();
+    this.convertImageToTextApp.convertDirectory();
   }
 
   void runTextToJsonConversion()
   {
     logger.info("executing conversion of text to json");
-    this.convertTextToJsonApp.execute();
+    this.convertTextToJsonApp.convertDirectory();
   }
 
   void runElasticsearchLoad()
   {
     logger.info("loading json to elasticsearch index");
-    this.loadElasticsearchApp.execute();
+    this.loadElasticsearchApp.loadDirectory();
   }
 
   void closeResources()

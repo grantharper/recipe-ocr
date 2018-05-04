@@ -49,7 +49,7 @@ public class ConvertTextToJsonApp
     this.recipeJsonCreator = recipeJsonCreator;
   }
 
-  public void execute()
+  public void convertDirectory()
   {
     try {
       Files.createDirectories(Paths.get(this.jsonOutputDir));
@@ -57,14 +57,14 @@ public class ConvertTextToJsonApp
               .filter(p -> p.getFileName()
                       .toString()
                       .endsWith(".txt"))
-              .forEach(this::extractRecipeJsonFromText);
+              .forEach(this::convertFile);
     } catch (IOException e) {
       logger.error("Input/Output directory problem", e);
     }
 
   }
 
-  void extractRecipeJsonFromText(Path textFile)
+  void convertFile(Path textFile)
   {
     try {
       logger.info("processing " + textFile.getFileName().toString());

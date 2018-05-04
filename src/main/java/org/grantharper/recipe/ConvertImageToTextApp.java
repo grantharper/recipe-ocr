@@ -51,7 +51,7 @@ public class ConvertImageToTextApp
     this.pngToTextConverter = pngToTextConverter;
   }
 
-  public void execute()
+  public void convertDirectory()
   {
     try {
       Files.createDirectories(Paths.get(this.pngOutputDir));
@@ -60,14 +60,14 @@ public class ConvertImageToTextApp
               .filter(p -> p.getFileName()
                       .toString()
                       .endsWith(".jpg"))
-              .forEach(this::performOCR);
+              .forEach(this::convertFile);
     } catch (IOException e) {
       logger.error("Input/Output directory problem", e);
     }
 
   }
 
-  void performOCR(Path imageFile)
+  void convertFile(Path imageFile)
   {
 
     try {

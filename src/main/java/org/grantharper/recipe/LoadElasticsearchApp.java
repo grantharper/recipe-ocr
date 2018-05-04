@@ -33,20 +33,20 @@ public class LoadElasticsearchApp
     this.recipeLoad = recipeLoad;
   }
 
-  void execute()
+  void loadDirectory()
   {
     try {
       Files.list(Paths.get(this.jsonOutputDir))
               .filter(p -> p.getFileName()
                       .toString()
                       .endsWith(".json"))
-              .forEach(this::loadToElasticSearch);
+              .forEach(this::loadFile);
     } catch (IOException e) {
       logger.error("Error while loading to elasticsearch", e);
     }
   }
 
-  void loadToElasticSearch(Path jsonFile){
+  void loadFile(Path jsonFile){
     logger.info("processing " + jsonFile.getFileName().toString());
     recipeLoad.loadRecipeJson(jsonFile);
   }
