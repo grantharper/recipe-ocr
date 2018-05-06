@@ -3,6 +3,7 @@ package org.grantharper.recipe;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.grantharper.recipe.domain.Recipe;
+import org.grantharper.recipe.parser.RecipeParser;
 import org.grantharper.recipe.parser.RecipeParserSurLaTable;
 import org.grantharper.recipe.serializer.FileUtils;
 import org.grantharper.recipe.serializer.RecipeJsonCreator;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,6 +33,7 @@ public class ConvertTextToJsonApp
   private final RecipeJsonCreator recipeJsonCreator;
 
   private Path jsonOutputDir;
+  private String recipeParserImplementationClassName;
 
   @Value("${outputDir.json}")
   void setJsonOutputDir(String jsonOutputDir)
@@ -37,10 +41,28 @@ public class ConvertTextToJsonApp
     this.jsonOutputDir = Paths.get(jsonOutputDir);
   }
 
+  @Value("${recipeParserImplementationClass}")
+  public void setRecipeParserImplementationClassName(String recipeParserImplementationClassName)
+  {
+    this.recipeParserImplementationClassName = recipeParserImplementationClassName;
+    try {
+      Class<?> recipeParserClass = Class.forName(recipeParserImplementationClassName);
+      List<Class<?>> recipeParserInterfaces = Arrays.asList(recipeParserClass.getInterfaces());
+      if(!recipeParserInterfaces.containsAll(Arrays.asList(Class.forName("org.grantharper.recipe.parser.RecipeParser")))){
+        throw new RuntimeException("provided class does not implement the RecipeParser interface");
+      }
+    } catch (ClassNotFoundException e) {
+      logger.error("Recipe parser class loading error", e);
+      throw new RuntimeException("Invalid recipe parser class=" + recipeParserImplementationClassName);
+    }
+
+  }
+
   @Autowired
   public ConvertTextToJsonApp(RecipeJsonCreator recipeJsonCreator)
   {
     this.recipeJsonCreator = recipeJsonCreator;
+
   }
 
   public void convert(RecipeMenuUserSelection recipeMenuUserSelection)
@@ -83,7 +105,7 @@ public class ConvertTextToJsonApp
       String recipeText = Files.readAllLines(textFile)
               .stream().collect(Collectors.joining("\n"));
 
-      Recipe recipe = new RecipeParserSurLaTable(textFile.getFileName().toString()).parse(recipeText);
+      Recipe recipe = convertFileEnhanced(recipeParserImplementationClassName, recipeText);
       String json = recipeJsonCreator.generateOutput(recipe);
       List<String> output = Arrays.asList(json);
 
@@ -93,6 +115,19 @@ public class ConvertTextToJsonApp
 
     }  catch (IOException e) {
       logger.error("Text to json conversion process failed: " + textFile, e);
+    }
+  }
+
+  Recipe convertFileEnhanced(String className, String recipeText)
+  {
+    try {
+      RecipeParser recipeParser = (RecipeParser) Class.forName(className).getConstructor().newInstance();
+      Recipe recipe = recipeParser.parse(recipeText);
+      return recipe;
+
+    } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+      logger.error("Recipe parser class loading error", e);
+      throw new RuntimeException("Invalid recipe parser class=" + className);
     }
   }
 

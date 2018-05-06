@@ -45,6 +45,12 @@ public class FileUtils
     return changeJpegExtensionToOtherExtension(jpegFilename, ".png");
   }
 
+  public static String removeExtension(String filename)
+  {
+    int extensionIndex = filename.lastIndexOf(".");
+    return filename.substring(0, extensionIndex);
+  }
+
   public static void cleanDirectory(Path directory)
   {
     try {

@@ -16,5 +16,17 @@ class FileUtilsSpec extends Specification
     htmlFilename == "sample.html"
     
   }
+
+  def "remove extension"()
+  {
+    given: "filename"
+    String filename = "blah.txt"
+
+    when: "extension is removed"
+    String withoutExtension = FileUtils.removeExtension(filename)
+
+    then: "only file name remains"
+    withoutExtension == "blah"
+  }
   
 }

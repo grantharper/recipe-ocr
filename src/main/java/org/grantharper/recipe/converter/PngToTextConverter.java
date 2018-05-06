@@ -41,7 +41,9 @@ public class PngToTextConverter implements FormatConverter
     Path outputTextFilePath = Paths.get(outputDirectory.toString(), FileUtils.changeFileExtensionToTxt(inputImage.getFileName()
             .toString()));
 
-    Files.write(outputTextFilePath, Arrays.asList(recipeText), Charset.defaultCharset(),
+    Files.write(outputTextFilePath,
+            Arrays.asList(FileUtils.removeExtension(inputImage.getFileName().toString()), recipeText),
+            Charset.defaultCharset(),
             StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     logger.info("created text file=" + outputTextFilePath.toString());
     return outputTextFilePath;

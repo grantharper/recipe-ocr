@@ -1,18 +1,12 @@
 package org.grantharper.recipe.parser;
 
-public class RecipeParserSurLaTable extends RecipeParserAbstract
+public class RecipeParserSurLaTable extends RecipeParserAbstract implements RecipeParser
 {
 
   private static final int YIELD_LENGTH = "Yield: ".length();
   private static final String FOOTER_IDENTIFIER = "www.sur";
   private static final int MAX_INGREDIENT_LINE_LENGTH = 90;
   private static final String BOOK_TITLE = "Sur La Table";
-
-  private final String pageId;
-
-  public RecipeParserSurLaTable(String fileName){
-    pageId = getPageNumberFromFileName(fileName);
-  }
 
   private String getPageNumberFromFileName(String fileName)
   {
@@ -36,9 +30,10 @@ public class RecipeParserSurLaTable extends RecipeParserAbstract
   public void identifyLineIndexes()
   {
 
-    //assumption is that the first line of the text is the title
-    this.titleIndex = 0;
-    this.servingSizeIndex = 1;
+    //assumption is that the first line of the text is the pageId coming from writing the file name to the top of the text file
+    this.pageIdIndex = 0;
+    this.titleIndex = 1;
+    this.servingSizeIndex = 2;
 
     boolean foundIngredientStart = false;
     boolean foundInstructionsStart = false;
@@ -75,12 +70,6 @@ public class RecipeParserSurLaTable extends RecipeParserAbstract
     if(this.instructionsEndIndex == null){
       this.instructionsEndIndex = recipeLines.size() - 1;
     }
-  }
-
-  @Override
-  public String extractPageId()
-  {
-    return pageId;
   }
 
   @Override

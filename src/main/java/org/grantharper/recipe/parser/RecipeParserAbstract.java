@@ -11,6 +11,7 @@ public abstract class RecipeParserAbstract implements RecipeParserExtended
 {
 
   protected List<String> recipeLines;
+  protected Integer pageIdIndex;
   protected Integer titleIndex;
   protected Integer servingSizeIndex;
   protected Integer ingredientsStartIndex;
@@ -33,12 +34,13 @@ public abstract class RecipeParserAbstract implements RecipeParserExtended
    */
   public abstract String extractBook();
 
-  /**
-   * Subclasses must provide the method for determining the pageId
-   * The pageId should be a unique identifier of the recipe within the book, e.g. the page number
-   * @return the page id for where the recipe is located in the book
-   */
-  public abstract String extractPageId();
+  public String extractPageId()
+  {
+    if(this.pageIdIndex == null) {
+      throw new IllegalStateException("Cannot extract pageId before indices are set");
+    }
+    return recipeLines.get(this.pageIdIndex);
+  }
   
   void parseRecipeLines(String text) {
     String[] output = text.split("\n");
