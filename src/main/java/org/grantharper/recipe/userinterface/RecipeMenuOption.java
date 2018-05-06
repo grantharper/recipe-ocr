@@ -36,15 +36,17 @@ public enum RecipeMenuOption
 
   public static RecipeMenuOption getOptionFromMenuOption(String menuOption)
   {
-    if (menuOption.equals(PROCESS_IMAGE_TO_TEXT.optionNumber)) {
+    if (menuOption == null) {
+      throw new RuntimeException("No console input received");
+    } else if (menuOption.equals(PROCESS_IMAGE_TO_TEXT.optionNumber)) {
       return PROCESS_IMAGE_TO_TEXT;
     } else if (menuOption.equals(PROCESS_TEXT_TO_JSON.optionNumber)) {
       return PROCESS_TEXT_TO_JSON;
     } else if (menuOption.equals(PROCESS_JSON_TO_ELASTICSEARCH.optionNumber)) {
       return PROCESS_JSON_TO_ELASTICSEARCH;
-    } else if(menuOption.equals(EXIT.optionNumber)){
+    } else if (menuOption.equals(EXIT.optionNumber)) {
       return EXIT;
-    }else {
+    } else {
       return null;
     }
 
