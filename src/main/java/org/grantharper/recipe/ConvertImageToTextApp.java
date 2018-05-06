@@ -24,7 +24,6 @@ public class ConvertImageToTextApp
   private FormatConverter jpegToPngConverter;
   private FormatConverter pngToTextConverter;
 
-  private Path jpgInputDir;
   private Path txtOutputDir;
   private Path pngOutputDir;
 
@@ -32,12 +31,6 @@ public class ConvertImageToTextApp
   void setTxtOutputDir(String txtOutputDir)
   {
     this.txtOutputDir = Paths.get(txtOutputDir);
-  }
-
-  @Value("${inputDir}")
-  void setJpgInputDir(String jpgInputDir)
-  {
-    this.jpgInputDir = Paths.get(jpgInputDir);
   }
 
   @Value("${outputDir.png}")
