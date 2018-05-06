@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.grantharper.recipe.converter.FormatConverter;
 import org.grantharper.recipe.ocr.OCRException;
+import org.grantharper.recipe.serializer.FileUtils;
 import org.grantharper.recipe.userinterface.RecipeMenuUserSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,26 +24,26 @@ public class ConvertImageToTextApp
   private FormatConverter jpegToPngConverter;
   private FormatConverter pngToTextConverter;
 
-  private String jpgInputDir;
-  private String txtOutputDir;
-  private String pngOutputDir;
+  private Path jpgInputDir;
+  private Path txtOutputDir;
+  private Path pngOutputDir;
 
   @Value("${outputDir.txt}")
   void setTxtOutputDir(String txtOutputDir)
   {
-    this.txtOutputDir = txtOutputDir;
+    this.txtOutputDir = Paths.get(txtOutputDir);
   }
 
   @Value("${inputDir}")
   void setJpgInputDir(String jpgInputDir)
   {
-    this.jpgInputDir = jpgInputDir;
+    this.jpgInputDir = Paths.get(jpgInputDir);
   }
 
   @Value("${outputDir.png}")
   void setPngOutputDir(String pngOutputDir)
   {
-    this.pngOutputDir = pngOutputDir;
+    this.pngOutputDir = Paths.get(pngOutputDir);
   }
 
   @Autowired
@@ -54,6 +55,18 @@ public class ConvertImageToTextApp
 
   public void convert(RecipeMenuUserSelection recipeMenuUserSelection)
   {
+    if (Files.exists(this.pngOutputDir)) {
+      FileUtils.cleanDirectory(this.pngOutputDir);
+    }else {
+      FileUtils.createDirectory(this.pngOutputDir);
+    }
+    if (Files.exists(this.txtOutputDir)) {
+      FileUtils.cleanDirectory(this.txtOutputDir);
+    }else {
+      FileUtils.createDirectory(this.txtOutputDir);
+    }
+
+
     Path sourcePath = recipeMenuUserSelection.getSourcePath();
     if (Files.isDirectory(sourcePath)) {
       convertDirectory(sourcePath);
@@ -67,8 +80,6 @@ public class ConvertImageToTextApp
   void convertDirectory(Path sourceDirectory)
   {
     try {
-      Files.createDirectories(Paths.get(this.pngOutputDir));
-      Files.createDirectories(Paths.get(this.txtOutputDir));
       Files.list(sourceDirectory)
               .filter(p -> p.getFileName()
                       .toString()
@@ -85,8 +96,8 @@ public class ConvertImageToTextApp
 
     try {
       logger.info("processing " + imageFile.getFileName().toString());
-      Path pngImageFile = jpegToPngConverter.convert(imageFile, Paths.get(this.pngOutputDir));
-      Path textFile = pngToTextConverter.convert(pngImageFile, Paths.get(this.txtOutputDir));
+      Path pngImageFile = jpegToPngConverter.convert(imageFile, this.pngOutputDir);
+      Path textFile = pngToTextConverter.convert(pngImageFile, this.txtOutputDir);
 
     } catch (OCRException e) {
       logger.error("Error with OCR processing: " + imageFile, e);
