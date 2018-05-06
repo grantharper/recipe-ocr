@@ -108,7 +108,7 @@ public class ConvertTextToJson
       List<String> output = Arrays.asList(json);
 
       Files.write(this.jsonOutputDir.resolve(FileUtils.changeFileExtensionToJson(textFile.getFileName()
-                      .toString())), output, Charset.defaultCharset(),
+                      .toString())), output, Charset.forName("UTF-8"),
               StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
     }  catch (IOException e) {

@@ -43,7 +43,7 @@ public class PngToTextConverter implements FormatConverter
 
     Files.write(outputTextFilePath,
             Arrays.asList(FileUtils.removeExtension(inputImage.getFileName().toString()), recipeText),
-            Charset.defaultCharset(),
+            Charset.forName("UTF-8"),
             StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     logger.info("created text file=" + outputTextFilePath.toString());
     return outputTextFilePath;

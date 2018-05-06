@@ -1,8 +1,11 @@
-apply plugin: "groovy"
-apply plugin: "java"
-apply plugin: "application"
+plugins{
+  id 'java'
+  id 'groovy'
+  id 'application'
+  id 'com.github.johnrengelman.shadow' version '2.0.4'
+}
 
-mainClassName="org.grantharper.recipe.Application"
+mainClassName="org.grantharper.recipe.RecipeApplication"
 
 version = "1.0-SNAPSHOT"
 description = "Recipe OCR"
@@ -11,6 +14,10 @@ sourceCompatibility = 1.8
 
 test {
   exclude '**/*Integration*'
+}
+
+run{
+  standardInput = System.in
 }
 
 repositories {
@@ -40,13 +47,3 @@ dependencies {
   testRuntime "org.objenesis:objenesis:2.5.1"    // allows mocking of classes without default constructor (together with CGLIB)
   testRuntime "com.h2database:h2:1.4.182"
 }
-
-apply from: "gradle/ide.gradle"
-
-task collectJars(type: Copy) {
-    into "$buildDir/output/lib"
-    from configurations.testRuntime
-}
-
-
-
