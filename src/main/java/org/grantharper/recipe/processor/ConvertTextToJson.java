@@ -1,10 +1,9 @@
-package org.grantharper.recipe;
+package org.grantharper.recipe.processor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.grantharper.recipe.domain.Recipe;
 import org.grantharper.recipe.parser.RecipeParser;
-import org.grantharper.recipe.parser.RecipeParserSurLaTable;
 import org.grantharper.recipe.serializer.FileUtils;
 import org.grantharper.recipe.serializer.RecipeJsonCreator;
 import org.grantharper.recipe.userinterface.RecipeMenuUserSelection;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -25,10 +23,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class ConvertTextToJsonApp
+public class ConvertTextToJson
 {
 
-  private static final Logger logger = LogManager.getLogger(ConvertTextToJsonApp.class);
+  private static final Logger logger = LogManager.getLogger(ConvertTextToJson.class);
 
   private final RecipeJsonCreator recipeJsonCreator;
 
@@ -59,7 +57,7 @@ public class ConvertTextToJsonApp
   }
 
   @Autowired
-  public ConvertTextToJsonApp(RecipeJsonCreator recipeJsonCreator)
+  public ConvertTextToJson(RecipeJsonCreator recipeJsonCreator)
   {
     this.recipeJsonCreator = recipeJsonCreator;
 

@@ -1,4 +1,4 @@
-package org.grantharper.recipe;
+package org.grantharper.recipe.processor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

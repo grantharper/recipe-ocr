@@ -3,6 +3,9 @@ package org.grantharper.recipe;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.grantharper.recipe.processor.ConvertImageToText;
+import org.grantharper.recipe.processor.ConvertTextToJson;
+import org.grantharper.recipe.processor.LoadElasticsearch;
 import org.grantharper.recipe.userinterface.RecipeMenuUserSelection;
 import org.grantharper.recipe.userinterface.RecipeProcessingMenu;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,25 +13,23 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-import java.io.Console;
 import java.io.IOException;
-import java.nio.file.Path;
 
 @ComponentScan
 public class RecipeApplication
 {
   private static final Logger logger = LogManager.getLogger(RecipeApplication.class);
 
-  private ConvertImageToTextApp convertImageToTextApp;
+  private ConvertImageToText convertImageToText;
   private RestHighLevelClient restHighLevelClient;
-  private ConvertTextToJsonApp convertTextToJsonApp;
-  private LoadElasticsearchApp loadElasticsearchApp;
+  private ConvertTextToJson convertTextToJson;
+  private LoadElasticsearch loadElasticsearch;
   private RecipeProcessingMenu recipeProcessingMenu;
 
   @Autowired
-  public void setConvertImageToTextApp(ConvertImageToTextApp convertImageToTextApp)
+  public void setConvertImageToText(ConvertImageToText convertImageToText)
   {
-    this.convertImageToTextApp = convertImageToTextApp;
+    this.convertImageToText = convertImageToText;
   }
 
   @Autowired
@@ -38,15 +39,15 @@ public class RecipeApplication
   }
 
   @Autowired
-  public void setConvertTextToJsonApp(ConvertTextToJsonApp convertTextToJsonApp)
+  public void setConvertTextToJson(ConvertTextToJson convertTextToJson)
   {
-    this.convertTextToJsonApp = convertTextToJsonApp;
+    this.convertTextToJson = convertTextToJson;
   }
 
   @Autowired
-  public void setLoadElasticsearchApp(LoadElasticsearchApp loadElasticsearchApp)
+  public void setLoadElasticsearch(LoadElasticsearch loadElasticsearch)
   {
-    this.loadElasticsearchApp = loadElasticsearchApp;
+    this.loadElasticsearch = loadElasticsearch;
   }
 
   @Autowired
@@ -94,19 +95,19 @@ public class RecipeApplication
   void runImageConversion(RecipeMenuUserSelection recipeMenuUserSelection)
   {
     logger.info("executing conversion of images to text");
-    this.convertImageToTextApp.convert(recipeMenuUserSelection);
+    this.convertImageToText.convert(recipeMenuUserSelection);
   }
 
   void runTextToJsonConversion(RecipeMenuUserSelection recipeMenuUserSelection)
   {
     logger.info("executing conversion of text to json");
-    this.convertTextToJsonApp.convert(recipeMenuUserSelection);
+    this.convertTextToJson.convert(recipeMenuUserSelection);
   }
 
   void runElasticsearchLoad(RecipeMenuUserSelection recipeMenuUserSelection)
   {
     logger.info("loading json to elasticsearch index");
-    this.loadElasticsearchApp.load(recipeMenuUserSelection);
+    this.loadElasticsearch.load(recipeMenuUserSelection);
   }
 
   void closeResources()

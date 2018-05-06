@@ -1,4 +1,4 @@
-package org.grantharper.recipe;
+package org.grantharper.recipe.processor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,10 +16,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Component
-public class ConvertImageToTextApp
+public class ConvertImageToText
 {
 
-  private static final Logger logger = LogManager.getLogger(ConvertImageToTextApp.class);
+  private static final Logger logger = LogManager.getLogger(ConvertImageToText.class);
 
   private FormatConverter jpegToPngConverter;
   private FormatConverter pngToTextConverter;
@@ -40,7 +40,7 @@ public class ConvertImageToTextApp
   }
 
   @Autowired
-  public ConvertImageToTextApp(FormatConverter jpegToPngConverter, FormatConverter pngToTextConverter)
+  public ConvertImageToText(FormatConverter jpegToPngConverter, FormatConverter pngToTextConverter)
   {
     this.jpegToPngConverter = jpegToPngConverter;
     this.pngToTextConverter = pngToTextConverter;
