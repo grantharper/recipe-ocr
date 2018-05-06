@@ -69,21 +69,27 @@ public class RecipeApplication
 
   void runApplication()
   {
-    try {
-      RecipeMenuUserSelection recipeMenuUserSelection = getUserInput();
-      switch (recipeMenuUserSelection.getRecipeMenuOption()) {
-        case PROCESS_IMAGE_TO_TEXT:
-          runImageConversion(recipeMenuUserSelection);
-          break;
-        case PROCESS_TEXT_TO_JSON:
-          runTextToJsonConversion(recipeMenuUserSelection);
-          break;
-        case PROCESS_JSON_TO_ELASTICSEARCH:
-          runElasticsearchLoad(recipeMenuUserSelection);
-          break;
+    boolean continueProcessing = true;
+    while(continueProcessing) {
+      try {
+        RecipeMenuUserSelection recipeMenuUserSelection = getUserInput();
+        switch (recipeMenuUserSelection.getRecipeMenuOption()) {
+          case PROCESS_IMAGE_TO_TEXT:
+            runImageConversion(recipeMenuUserSelection);
+            break;
+          case PROCESS_TEXT_TO_JSON:
+            runTextToJsonConversion(recipeMenuUserSelection);
+            break;
+          case PROCESS_JSON_TO_ELASTICSEARCH:
+            runElasticsearchLoad(recipeMenuUserSelection);
+            break;
+          case EXIT:
+            continueProcessing = false;
+            break;
+        }
+      } catch (Exception e) {
+        logger.error("Processing error", e);
       }
-    } catch (Exception e) {
-      logger.error("Processing error", e);
     }
   }
 

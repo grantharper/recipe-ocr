@@ -4,7 +4,8 @@ public enum RecipeMenuOption
 {
   PROCESS_IMAGE_TO_TEXT("1", "Process image into text", "data/input"),
   PROCESS_TEXT_TO_JSON("2", "Process text into JSON", "data/output/text"),
-  PROCESS_JSON_TO_ELASTICSEARCH("3", "Load JSON to the Elasticsearch Index", "data/output/json");
+  PROCESS_JSON_TO_ELASTICSEARCH("3", "Load JSON to the Elasticsearch Index", "data/output/json"),
+  EXIT("4", "Exit the application", "nothing");
 
 
   private String optionNumber;
@@ -41,7 +42,9 @@ public enum RecipeMenuOption
       return PROCESS_TEXT_TO_JSON;
     } else if (menuOption.equals(PROCESS_JSON_TO_ELASTICSEARCH.optionNumber)) {
       return PROCESS_JSON_TO_ELASTICSEARCH;
-    } else {
+    } else if(menuOption.equals(EXIT.optionNumber)){
+      return EXIT;
+    }else {
       return null;
     }
 
