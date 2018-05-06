@@ -3,6 +3,8 @@ package org.grantharper.recipe;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.grantharper.recipe.elasticsearch.RecipeLoad;
+import org.grantharper.recipe.serializer.FileUtils;
+import org.grantharper.recipe.userinterface.RecipeMenuUserSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,13 +21,6 @@ public class LoadElasticsearchApp
   private static final Logger logger = LogManager.getLogger(LoadElasticsearchApp.class);
 
   private final RecipeLoad recipeLoad;
-  private String jsonOutputDir;
-
-  @Value("${outputDir.json}")
-  void setJsonOutputDir(String jsonOutputDir)
-  {
-    this.jsonOutputDir = jsonOutputDir;
-  }
 
   @Autowired
   public LoadElasticsearchApp(RecipeLoad recipeLoad)
@@ -33,10 +28,23 @@ public class LoadElasticsearchApp
     this.recipeLoad = recipeLoad;
   }
 
-  void loadDirectory()
+  public void load(RecipeMenuUserSelection recipeMenuUserSelection)
+  {
+
+    Path sourcePath = recipeMenuUserSelection.getSourcePath();
+    if (Files.isDirectory(sourcePath)) {
+      loadDirectory(sourcePath);
+    } else if (Files.isRegularFile(sourcePath)) {
+      loadFile(sourcePath);
+    } else {
+      throw new RuntimeException("Invalid source path: " + sourcePath.toString());
+    }
+  }
+
+  void loadDirectory(Path sourceDirectory)
   {
     try {
-      Files.list(Paths.get(this.jsonOutputDir))
+      Files.list(sourceDirectory)
               .filter(p -> p.getFileName()
                       .toString()
                       .endsWith(".json"))

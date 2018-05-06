@@ -46,7 +46,5 @@ public enum RecipeMenuOption
     }
 
   }
-  //use Enums to define the two menus
-  //use the builder pattern to make this class immutable and
-  //be created by the RecipeProcessingMenu class and then passed to RecipeApplication
+
 }

@@ -6,6 +6,7 @@ import org.grantharper.recipe.domain.Recipe;
 import org.grantharper.recipe.parser.RecipeParserSurLaTable;
 import org.grantharper.recipe.serializer.FileUtils;
 import org.grantharper.recipe.serializer.RecipeJsonCreator;
+import org.grantharper.recipe.userinterface.RecipeMenuUserSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -28,19 +29,12 @@ public class ConvertTextToJsonApp
 
   private final RecipeJsonCreator recipeJsonCreator;
 
-  private String jsonOutputDir;
-  private String txtOutputDir;
+  private Path jsonOutputDir;
 
   @Value("${outputDir.json}")
   void setJsonOutputDir(String jsonOutputDir)
   {
-    this.jsonOutputDir = jsonOutputDir;
-  }
-
-  @Value("${outputDir.txt}")
-  void setTxtOutputDir(String txtOutputDir)
-  {
-    this.txtOutputDir = txtOutputDir;
+    this.jsonOutputDir = Paths.get(jsonOutputDir);
   }
 
   @Autowired
@@ -49,11 +43,29 @@ public class ConvertTextToJsonApp
     this.recipeJsonCreator = recipeJsonCreator;
   }
 
-  public void convertDirectory()
+  public void convert(RecipeMenuUserSelection recipeMenuUserSelection)
+  {
+    if (Files.exists(this.jsonOutputDir)) {
+      FileUtils.cleanDirectory(this.jsonOutputDir);
+    }else {
+      FileUtils.createDirectory(this.jsonOutputDir);
+    }
+
+    Path sourcePath = recipeMenuUserSelection.getSourcePath();
+    if (Files.isDirectory(sourcePath)) {
+      convertDirectory(sourcePath);
+    } else if (Files.isRegularFile(sourcePath)) {
+      convertFile(sourcePath);
+    } else {
+      throw new RuntimeException("Invalid source path: " + sourcePath.toString());
+    }
+  }
+
+  void convertDirectory(Path sourcePath)
   {
     try {
-      Files.createDirectories(Paths.get(this.jsonOutputDir));
-      Files.list(Paths.get(this.txtOutputDir))
+      Files.createDirectories(this.jsonOutputDir);
+      Files.list(sourcePath)
               .filter(p -> p.getFileName()
                       .toString()
                       .endsWith(".txt"))
@@ -75,7 +87,7 @@ public class ConvertTextToJsonApp
       String json = recipeJsonCreator.generateOutput(recipe);
       List<String> output = Arrays.asList(json);
 
-      Files.write(Paths.get(this.jsonOutputDir, FileUtils.changeFileExtensionToJson(textFile.getFileName()
+      Files.write(this.jsonOutputDir.resolve(FileUtils.changeFileExtensionToJson(textFile.getFileName()
                       .toString())), output, Charset.defaultCharset(),
               StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 

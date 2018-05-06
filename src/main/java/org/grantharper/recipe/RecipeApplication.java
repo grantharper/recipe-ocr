@@ -100,13 +100,13 @@ public class RecipeApplication
   void runTextToJsonConversion(RecipeMenuUserSelection recipeMenuUserSelection)
   {
     logger.info("executing conversion of text to json");
-    this.convertTextToJsonApp.convertDirectory();
+    this.convertTextToJsonApp.convert(recipeMenuUserSelection);
   }
 
   void runElasticsearchLoad(RecipeMenuUserSelection recipeMenuUserSelection)
   {
     logger.info("loading json to elasticsearch index");
-    this.loadElasticsearchApp.loadDirectory();
+    this.loadElasticsearchApp.load(recipeMenuUserSelection);
   }
 
   void closeResources()
