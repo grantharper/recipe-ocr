@@ -3,6 +3,8 @@ package org.grantharper.recipe;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.grantharper.recipe.userinterface.RecipeMenuUserSelection;
+import org.grantharper.recipe.userinterface.RecipeProcessingMenu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -10,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 import java.io.Console;
 import java.io.IOException;
+import java.nio.file.Path;
 
 @ComponentScan
 public class RecipeApplication
@@ -20,6 +23,7 @@ public class RecipeApplication
   private RestHighLevelClient restHighLevelClient;
   private ConvertTextToJsonApp convertTextToJsonApp;
   private LoadElasticsearchApp loadElasticsearchApp;
+  private RecipeProcessingMenu recipeProcessingMenu;
 
   @Autowired
   public void setConvertImageToTextApp(ConvertImageToTextApp convertImageToTextApp)
@@ -45,43 +49,61 @@ public class RecipeApplication
     this.loadElasticsearchApp = loadElasticsearchApp;
   }
 
+  @Autowired
+  public void setRecipeProcessingMenu(RecipeProcessingMenu recipeProcessingMenu)
+  {
+    this.recipeProcessingMenu = recipeProcessingMenu;
+  }
+
   public static void main(String[] args)
   {
     logger.info("OCR App Running");
-    //TODO: add ability to be a console app where the user specifies which processing steps to perform
-
-    //Option 1: Image to Text
-    //Option 2: Text to Json
-    //Option 3: Json to Elasticsearch
-
-    //sub-option 1: process file
-    //sub-option 2: process directory
-
-    // System.in.read();
-
-    //ApplicationContext context =
-    //        new AnnotationConfigApplicationContext(RecipeApplication.class);
-    //RecipeApplication recipeApplication = context.getBean(RecipeApplication.class);
-    //recipeApplication.runImageConversion();
-    //recipeApplication.runTextToJsonConversion();
-    //recipeApplication.runElasticsearchLoad();
-    //recipeApplication.closeResources();
+    ApplicationContext context =
+            new AnnotationConfigApplicationContext(RecipeApplication.class);
+    RecipeApplication recipeApplication = context.getBean(RecipeApplication.class);
+    recipeApplication.runApplication();
+    recipeApplication.closeResources();
 
   }
 
-  void runImageConversion()
+  void runApplication()
+  {
+    try {
+      RecipeMenuUserSelection recipeMenuUserSelection = getUserInput();
+      switch (recipeMenuUserSelection.getRecipeMenuOption()) {
+        case PROCESS_IMAGE_TO_TEXT:
+          runImageConversion(recipeMenuUserSelection);
+          break;
+        case PROCESS_TEXT_TO_JSON:
+          runTextToJsonConversion(recipeMenuUserSelection);
+          break;
+        case PROCESS_JSON_TO_ELASTICSEARCH:
+          runElasticsearchLoad(recipeMenuUserSelection);
+          break;
+      }
+    } catch (Exception e) {
+      logger.error("Processing error", e);
+    }
+  }
+
+  RecipeMenuUserSelection getUserInput() throws IOException
+  {
+    return recipeProcessingMenu.runProcessingMenu();
+  }
+
+  void runImageConversion(RecipeMenuUserSelection recipeMenuUserSelection)
   {
     logger.info("executing conversion of images to text");
-    this.convertImageToTextApp.convertDirectory();
+    this.convertImageToTextApp.convert(recipeMenuUserSelection);
   }
 
-  void runTextToJsonConversion()
+  void runTextToJsonConversion(RecipeMenuUserSelection recipeMenuUserSelection)
   {
     logger.info("executing conversion of text to json");
     this.convertTextToJsonApp.convertDirectory();
   }
 
-  void runElasticsearchLoad()
+  void runElasticsearchLoad(RecipeMenuUserSelection recipeMenuUserSelection)
   {
     logger.info("loading json to elasticsearch index");
     this.loadElasticsearchApp.loadDirectory();

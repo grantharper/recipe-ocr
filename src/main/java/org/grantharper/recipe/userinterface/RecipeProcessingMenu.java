@@ -20,11 +20,19 @@ public class RecipeProcessingMenu
 
   public static void main(String[] args)
   {
-    runProcessingMenu();
+    try{
+      RecipeProcessingMenu recipeProcessingMenu = new RecipeProcessingMenu();
+      recipeProcessingMenu.runProcessingMenu();
+    }catch (IOException e) {
+      logger.error("Failed to read user input", e);
+    }
   }
 
-  public static void runProcessingMenu()
+  public RecipeMenuUserSelection runProcessingMenu() throws IOException
   {
+    RecipeMenuUserSelection.RecipeMenuUserSelectionBuilder builder =
+            new RecipeMenuUserSelection.RecipeMenuUserSelectionBuilder();
+
     try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
       PrintStream ps = System.out;
       RecipeMenuOption processingUserSelection = null;
@@ -37,6 +45,7 @@ public class RecipeProcessingMenu
         processingUserSelection = RecipeMenuOption.getOptionFromMenuOption(br.readLine());
       }
       ps.println("You selected processing step: " + processingUserSelection);
+      builder.setRecipeMenuOption(processingUserSelection);
       Path datasourceInputPath = null;
       while (datasourceInputPath == null || !datasourceInputPath.toFile().exists()) {
         ps.println("Input a file or directory to process: (default) "
@@ -45,9 +54,9 @@ public class RecipeProcessingMenu
         datasourceInputPath = determineSource(targetSourceUserInput, processingUserSelection);
       }
       ps.println("You selected the data source: " + datasourceInputPath);
-    } catch (IOException e) {
-      logger.error("Failed to read user input", e);
+      builder.setSourcePath(datasourceInputPath);
     }
+    return builder.build();
   }
 
   static Path determineSource(String datasourceUserInput, RecipeMenuOption menuOption)

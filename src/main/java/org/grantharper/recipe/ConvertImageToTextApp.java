@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.grantharper.recipe.converter.FormatConverter;
 import org.grantharper.recipe.ocr.OCRException;
+import org.grantharper.recipe.userinterface.RecipeMenuUserSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -51,12 +52,24 @@ public class ConvertImageToTextApp
     this.pngToTextConverter = pngToTextConverter;
   }
 
-  public void convertDirectory()
+  public void convert(RecipeMenuUserSelection recipeMenuUserSelection)
+  {
+    Path sourcePath = recipeMenuUserSelection.getSourcePath();
+    if (Files.isDirectory(sourcePath)) {
+      convertDirectory(sourcePath);
+    } else if (Files.isRegularFile(sourcePath)) {
+      convertFile(sourcePath);
+    } else {
+      throw new RuntimeException("Invalid source path: " + sourcePath.toString());
+    }
+  }
+
+  void convertDirectory(Path sourceDirectory)
   {
     try {
       Files.createDirectories(Paths.get(this.pngOutputDir));
       Files.createDirectories(Paths.get(this.txtOutputDir));
-      Files.list(Paths.get(this.jpgInputDir))
+      Files.list(sourceDirectory)
               .filter(p -> p.getFileName()
                       .toString()
                       .endsWith(".jpg"))
