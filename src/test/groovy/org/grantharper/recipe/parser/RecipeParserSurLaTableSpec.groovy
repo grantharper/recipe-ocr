@@ -18,7 +18,6 @@ class RecipeParserSurLaTableSpec extends Specification
 {
 
   Path recipeTestFile
-  Path recipeTestFileNoFooter
   List<String> recipeLines
   String recipeText
   RecipeParserAbstract recipeCreator
@@ -28,7 +27,7 @@ class RecipeParserSurLaTableSpec extends Specification
     recipeTestFile = Paths.get("src/test/resources/sample-recipe.txt")
     recipeLines = Files.readAllLines(recipeTestFile, Charset.defaultCharset())
     recipeText = recipeLines.stream().collect(Collectors.joining("\n"));
-    recipeCreator = new RecipeParserSurLaTable("sample-recipe.txt");
+    recipeCreator = new RecipeParserSurLaTable();
     recipeCreator.parseRecipeLines(recipeText);
   }
 
@@ -52,8 +51,11 @@ class RecipeParserSurLaTableSpec extends Specification
 
   def "Extract pageId from recipe filename"()
   {
-    expect: "recipe parser instantiation provides pageId"
-    recipeCreator.extractPageId() == "sample-recipe"
+    when: "indices are set"
+    recipeCreator.identifyLineIndexes()
+
+    then: "recipe parser instantiation provides pageId"
+    recipeCreator.extractPageId() == "102"
 
   }
 
@@ -82,10 +84,10 @@ class RecipeParserSurLaTableSpec extends Specification
     recipeCreator.identifyLineIndexes()
 
     then: "they are correct"
-    recipeCreator.instructionsEndIndex == 15
-    recipeCreator.ingredientsStartIndex == 5
-    recipeCreator.ingredientsEndIndex == 11
-    recipeCreator.instructionsStartIndex == 12
+    recipeCreator.instructionsEndIndex == 16
+    recipeCreator.ingredientsStartIndex == 6
+    recipeCreator.ingredientsEndIndex == 12
+    recipeCreator.instructionsStartIndex == 13
   }
 
   def "Extract ingredient section from recipe raw text"()
