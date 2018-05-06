@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.io.Console;
 import java.io.IOException;
 
 @ComponentScan
@@ -47,13 +48,24 @@ public class RecipeApplication
   public static void main(String[] args)
   {
     logger.info("OCR App Running");
-    ApplicationContext context =
-            new AnnotationConfigApplicationContext(RecipeApplication.class);
-    RecipeApplication recipeApplication = context.getBean(RecipeApplication.class);
-    recipeApplication.runImageConversion();
-    recipeApplication.runTextToJsonConversion();
-    recipeApplication.runElasticsearchLoad();
-    recipeApplication.closeResources();
+    //TODO: add ability to be a console app where the user specifies which processing steps to perform
+
+    //Option 1: Image to Text
+    //Option 2: Text to Json
+    //Option 3: Json to Elasticsearch
+
+    //sub-option 1: process file
+    //sub-option 2: process directory
+
+    // System.in.read();
+
+    //ApplicationContext context =
+    //        new AnnotationConfigApplicationContext(RecipeApplication.class);
+    //RecipeApplication recipeApplication = context.getBean(RecipeApplication.class);
+    //recipeApplication.runImageConversion();
+    //recipeApplication.runTextToJsonConversion();
+    //recipeApplication.runElasticsearchLoad();
+    //recipeApplication.closeResources();
 
   }
 
