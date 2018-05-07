@@ -64,7 +64,7 @@ public class RecipeLoad
       throw new RuntimeException();
     }
 
-    String uniqueId = recipe.getBook().replace(" ", "") + recipe.getPageId();
+    String uniqueId = recipe.getBook().replace(" ", "") + recipe.getPageId().replace(" ", "");
 
     IndexRequest indexRequest = new IndexRequest(
             this.recipeIndexName, this.recipeIndexType,

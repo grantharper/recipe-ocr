@@ -14,6 +14,10 @@ To delete the index if you want to start over
 
 `curl -X DELETE localhost:9200/recipe`
 
+To remove a particular id from the index
+
+`curl -X DELETE localhost:9200/recipe/doc/<id>`
+
 ## OCR Setup and Build
 
 Copy in the Tesseract data into the tessdata directory. This data can be found [here](https://github.com/tesseract-ocr/tessdata/tree/3.04.00)

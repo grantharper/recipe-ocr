@@ -22,7 +22,8 @@ public abstract class RecipeParserAbstract implements RecipeParserExtended
   /*
    * Subclasses provide instructions on how to identify indices so 
    * that the recipe information may be extracted from various
-   * formats
+   * formats. This method must set the above index integer values in order
+   * for the subsequent parsing methods to be successful
    */
   protected abstract void identifyLineIndexes();
 
