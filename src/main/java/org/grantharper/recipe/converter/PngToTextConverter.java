@@ -37,9 +37,12 @@ public class PngToTextConverter implements FormatConverter
   {
     logger.info("performing OCR: " + inputImage.getFileName().toString());
     String recipeText = this.ocrExecutor.performTargetedOCR(inputImage, this.imageFileViewport);
+    //remove double newline characters which make the file longer than necessary
+    recipeText = recipeText.replace("\n\n", "\n");
     //TODO: make the extension change more generic so that it doesn't matter the file format
     Path outputTextFilePath = Paths.get(outputDirectory.toString(), FileUtils.changeFileExtensionToTxt(inputImage.getFileName()
             .toString()));
+
 
     Files.write(outputTextFilePath,
             Arrays.asList(FileUtils.removeExtension(inputImage.getFileName().toString()), recipeText),
