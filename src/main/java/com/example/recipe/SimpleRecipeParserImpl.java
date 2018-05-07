@@ -3,7 +3,7 @@ package com.example.recipe;
 import org.grantharper.recipe.parser.RecipeParser;
 import org.grantharper.recipe.parser.RecipeParserAbstract;
 
-public class AwesomeRecipeParser extends RecipeParserAbstract implements RecipeParser
+public class SimpleRecipeParserImpl extends RecipeParserAbstract implements RecipeParser
 {
   @Override
   protected void identifyLineIndexes()
