@@ -24,7 +24,7 @@ class RecipeParserSurLaTableSpec extends Specification
 
   def setup()
   {
-    recipeTestFile = Paths.get("src/test/resources/sample-recipe.txt")
+    recipeTestFile = Paths.get("src/test/resources/sample.txt")
     recipeLines = Files.readAllLines(recipeTestFile, Charset.defaultCharset())
     recipeText = recipeLines.stream().collect(Collectors.joining("\n"));
     recipeCreator = new RecipeParserSurLaTable();
@@ -45,7 +45,7 @@ class RecipeParserSurLaTableSpec extends Specification
     String title = recipeCreator.extractTitle()
 
     then: "title is correct"
-    title == "Whipped Feta with Grilled Pita Bread"
+    title == "Best Pizza"
 
   }
 
@@ -55,7 +55,7 @@ class RecipeParserSurLaTableSpec extends Specification
     recipeCreator.identifyLineIndexes()
 
     then: "recipe parser instantiation provides pageId"
-    recipeCreator.extractPageId() == "102"
+    recipeCreator.extractPageId() == "450"
 
   }
 
@@ -73,8 +73,8 @@ class RecipeParserSurLaTableSpec extends Specification
     when: "serving size is extracted from the recipe"
     String servingSize = recipeCreator.extractServingSize()
 
-    then: "title is correct"
-    servingSize == "3 cups"
+    then: "serving size is correct"
+    servingSize == "2 large pizzas"
   }
 
   def "Identify indices of the ingredients, instructions, and footer"()
@@ -84,10 +84,10 @@ class RecipeParserSurLaTableSpec extends Specification
     recipeCreator.identifyLineIndexes()
 
     then: "they are correct"
-    recipeCreator.instructionsEndIndex == 16
-    recipeCreator.ingredientsStartIndex == 6
-    recipeCreator.ingredientsEndIndex == 12
-    recipeCreator.instructionsStartIndex == 13
+    recipeCreator.ingredientsStartIndex == 3
+    recipeCreator.ingredientsEndIndex == 8
+    recipeCreator.instructionsStartIndex == 9
+    recipeCreator.instructionsEndIndex == 11
   }
 
   def "Extract ingredient section from recipe raw text"()
@@ -99,9 +99,9 @@ class RecipeParserSurLaTableSpec extends Specification
     List<String> ingredients = recipeCreator.extractIngredients()
 
     then: "ingredients are correct"
-    ingredients.size() == 7
-    ingredients.get(0) == "3 cups crumbled Greek feta"
-    ingredients.get(6) == "Warm pita bread for serving"
+    ingredients.size() == 6
+    ingredients.get(0) == "Olive oil"
+    ingredients.get(5) == "Cheese"
 
 
   }
@@ -116,7 +116,7 @@ class RecipeParserSurLaTableSpec extends Specification
 
     then: "instructions are correct"
     instructions != null
-    !instructions.contains("www.surlatable.com")
+    !instructions.contains("Mix together flour and salt")
 
 
   }

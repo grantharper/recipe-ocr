@@ -30,7 +30,7 @@ class RecipeLoadIntegrationSpec extends Specification
 
   def "write recipe to the recipe index"() {
     when: "recipe json is written to the recipe index"
-    IndexResponse indexResponse = recipeLoad.loadRecipeJson("src/test/resources/sample-recipe.json")
+    IndexResponse indexResponse = recipeLoad.loadRecipeJson("src/test/resources/sample.json")
 
     then: "response is successful"
     indexResponse.status() == RestStatus.OK
