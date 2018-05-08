@@ -4,7 +4,5 @@ import org.grantharper.recipe.domain.Recipe;
 
 public interface RecipeParser
 {
-
-  public Recipe parse(String text);
-  
+  Recipe parse(String text);
 }
