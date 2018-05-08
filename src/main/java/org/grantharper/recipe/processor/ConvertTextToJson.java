@@ -46,7 +46,10 @@ public class ConvertTextToJson
     try {
       Class<?> recipeParserClass = Class.forName(recipeParserImplementationClassName);
       List<Class<?>> recipeParserInterfaces = Arrays.asList(recipeParserClass.getInterfaces());
-      if(!recipeParserInterfaces.containsAll(Arrays.asList(Class.forName("org.grantharper.recipe.parser.RecipeParser")))){
+      Class<?>recipeParserParentClasses = recipeParserClass.getSuperclass();
+      if (!recipeParserInterfaces.contains(Class.forName("org.grantharper.recipe.parser.RecipeParser"))
+              && !recipeParserInterfaces.contains(Class.forName("org.grantharper.recipe.parser.RecipeParserExtended"))
+              && !recipeParserParentClasses.equals(Class.forName("org.grantharper.recipe.parser.RecipeParserAbstract"))) {
         throw new RuntimeException("provided class does not implement the RecipeParser interface");
       }
     } catch (ClassNotFoundException e) {
