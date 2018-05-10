@@ -23,22 +23,32 @@ public class AppConfig
 
   private static final Logger logger = LogManager.getLogger(AppConfig.class);
 
-  @Value("${rectangle.x: 150}")
-  private int rectangleX;
+  @Value("${rectangle.x1}")
+  private int rectangleX1;
 
-  @Value("${rectangle.y: 400}")
-  private int rectangleY;
+  @Value("${rectangle.x2}")
+  private int rectangleX2;
 
-  @Value("${rectangle.width: 2250}")
-  private int rectangleWidth;
+  @Value("${rectangle.y1}")
+  private int rectangleY1;
 
-  @Value("${rectangle.height: 2770}")
-  private int rectangleHeight;
+  @Value("${rectangle.y2}")
+  private int rectangleY2;
+
+  @Value("${elasticsearch.hostname}")
+  private String elasticsearchHostname;
+
+  private Rectangle determineRectangleDimensions()
+  {
+    int rectangleWidth = rectangleX2 - rectangleX1;
+    int rectangleHeight = rectangleY2 - rectangleY1;
+    return new Rectangle(rectangleX1, rectangleY1, rectangleWidth, rectangleHeight);
+  }
 
   @Bean
   public Rectangle getRecipeViewport()
   {
-    return new Rectangle(rectangleX, rectangleY, rectangleWidth, rectangleHeight);
+    return determineRectangleDimensions();
   }
 
   @Bean
@@ -51,8 +61,8 @@ public class AppConfig
   public RestHighLevelClient restHighLevelClient()
   {
     return new RestHighLevelClient(
-            RestClient.builder(new HttpHost("localhost", 9200, "http"),
-                    new HttpHost("localhost", 9201, "http")));
+            RestClient.builder(new HttpHost(elasticsearchHostname, 9200),
+                    new HttpHost(elasticsearchHostname, 9201)));
   }
 
   @Bean
