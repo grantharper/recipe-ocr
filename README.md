@@ -41,7 +41,10 @@ Follow the menu instructions to process the image files and load them to a local
 
 The mid-pipeline text output will be sent to the output directories defined in `application.properties`. Make sure to review the output after each step since the OCR has a tendency to pick up extra notes and splotches as characters which will then show up in the recipe json.
 
-Once you have edited the txt files, run the application again. For any image file that already has a corresponding text file, the image will not go through OCR again. The parser will simply read in the existing text file and translate that to json.
+Once you have edited the txt files, the next step is to process the text into json. To define your own recipe parser, implement the RecipeParser interface or another interface or abstract class that extend/implement that interface.
+To determine which parser the application will use, set the property `recipeParserImplementationClass` in `application.properties`
+
+Review the json and then load the recipes into the elasticsearch index.
 
 ## Elasticsearch Searches
 
