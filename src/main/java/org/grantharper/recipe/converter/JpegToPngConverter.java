@@ -19,7 +19,7 @@ public class JpegToPngConverter implements FormatConverter
 
   public Path convert(Path jpegFile, Path outputDir) throws IOException
   {
-    String pngFilename = FileUtils.changeJpegExtensionToPng(jpegFile.getFileName().toString());
+    String pngFilename = FileUtils.changeFileExtensionToPng(jpegFile.getFileName().toString());
     File outputFile = new File(outputDir.toString() + "/" + pngFilename);
     BufferedImage bufferedImage = ImageIO.read(jpegFile.toFile());
     ImageIO.write(bufferedImage, "png", outputFile);

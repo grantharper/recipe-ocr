@@ -18,29 +18,24 @@ public class FileUtils
   {
   }
 
-  public static String changeFileExtensionToHtml(String pngFilename)
+  public static String changeFileExtensionToHtml(String filename)
   {
-    return changeFileExtensionToOtherExtension(pngFilename, ".html");
+    return changeExtension(filename, ".html");
   }
 
-  public static String changeFileExtensionToTxt(String pngFilename)
+  public static String changeFileExtensionToTxt(String filename)
   {
-    return changeFileExtensionToOtherExtension(pngFilename, ".txt");
+    return changeExtension(filename, ".txt");
   }
 
-  public static String changeFileExtensionToJson(String pngFilename)
+  public static String changeFileExtensionToJson(String filename)
   {
-    return changeFileExtensionToOtherExtension(pngFilename, ".json");
+    return changeExtension(filename, ".json");
   }
 
-  private static String changeFileExtensionToOtherExtension(String originalFilename, String otherExtension)
+  public static String changeFileExtensionToPng(String filename)
   {
-    return originalFilename.substring(0, originalFilename.length() - 4) + otherExtension;
-  }
-
-  public static String changeJpegExtensionToPng(String jpegFilename)
-  {
-    return changeJpegExtensionToOtherExtension(jpegFilename, ".png");
+    return changeExtension(filename, ".png");
   }
 
   public static String removeExtension(String filename)
@@ -73,16 +68,10 @@ public class FileUtils
     }
   }
 
-  private static String changeJpegExtensionToOtherExtension(String jpegFilename, String otherExtension)
+  static String changeExtension(String filename, String otherExtension)
   {
-
-    int truncationLength = 5;
-
-    if (jpegFilename.endsWith(".jpg")) {
-      truncationLength = 4;
-    }
-
-    return jpegFilename.substring(0, jpegFilename.length() - truncationLength) + otherExtension;
+    int extensionIndex = filename.lastIndexOf(".");
+    return filename.substring(0, extensionIndex).concat(otherExtension);
   }
 
 }
