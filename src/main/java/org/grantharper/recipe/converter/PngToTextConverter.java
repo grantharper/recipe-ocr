@@ -14,7 +14,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class PngToTextConverter implements FormatConverter
@@ -30,6 +32,14 @@ public class PngToTextConverter implements FormatConverter
   {
     this.ocrExecutor = ocrExecutor;
     this.imageFileViewport = imageFileViewport;
+  }
+
+  private List<Rectangle> imageFileViewportList;
+  public PngToTextConverter(OCRExecutor ocrExecutor, List<Rectangle> imageFileViewportList)
+  {
+    this(ocrExecutor, imageFileViewportList.get(0));
+    this.imageFileViewportList = imageFileViewportList;
+
   }
 
   @Override
@@ -51,6 +61,17 @@ public class PngToTextConverter implements FormatConverter
     logger.info("created text file=" + outputTextFilePath.toString());
     return outputTextFilePath;
 
+  }
+
+  List<String> extractTextFromRectangles(Path inputImage)
+  {
+    logger.info("performing OCR: " + inputImage.getFileName().toString());
+    List<String> extractedInformation = new ArrayList<>();
+    for (Rectangle rectangle : this.imageFileViewportList) {
+      String text = this.ocrExecutor.performTargetedOCR(inputImage, rectangle);
+      extractedInformation.add(text);
+    }
+    return extractedInformation;
   }
 
 }
