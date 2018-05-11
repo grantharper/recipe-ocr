@@ -3,6 +3,7 @@ package org.grantharper.recipe.converter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.grantharper.recipe.ocr.OCRExecutor;
+import org.grantharper.recipe.ocr.RectangleProvider;
 import org.grantharper.recipe.serializer.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,37 +26,26 @@ public class PngToTextConverter implements FormatConverter
   private static final Logger logger = LogManager.getLogger(PngToTextConverter.class);
 
   private final OCRExecutor ocrExecutor;
-  private final Rectangle imageFileViewport;
+
+  private RectangleProvider rectangleProvider;
 
   @Autowired
-  public PngToTextConverter(OCRExecutor ocrExecutor, Rectangle imageFileViewport)
+  public PngToTextConverter(OCRExecutor ocrExecutor, RectangleProvider rectangleProvider)
   {
     this.ocrExecutor = ocrExecutor;
-    this.imageFileViewport = imageFileViewport;
-  }
-
-  private List<Rectangle> imageFileViewportList;
-  public PngToTextConverter(OCRExecutor ocrExecutor, List<Rectangle> imageFileViewportList)
-  {
-    this(ocrExecutor, imageFileViewportList.get(0));
-    this.imageFileViewportList = imageFileViewportList;
-
+    this.rectangleProvider = rectangleProvider;
   }
 
   @Override
   public Path convert(Path inputImage, Path outputDirectory) throws IOException
   {
     logger.info("performing OCR: " + inputImage.getFileName().toString());
-    String recipeText = this.ocrExecutor.performTargetedOCR(inputImage, this.imageFileViewport);
-    //remove double newline characters which make the file longer than necessary
-    recipeText = recipeText.replace("\n\n", "\n");
-    //TODO: make the extension change more generic so that it doesn't matter the file format
+    List<Rectangle> rectangles = rectangleProvider.getRectangles();
+    List<String> outputText = extractTextFromRectangles(inputImage, rectangles);
     Path outputTextFilePath = Paths.get(outputDirectory.toString(), FileUtils.changeFileExtensionToTxt(inputImage.getFileName()
             .toString()));
-
-
     Files.write(outputTextFilePath,
-            Arrays.asList(FileUtils.removeExtension(inputImage.getFileName().toString()), recipeText),
+            outputText,
             Charset.forName("UTF-8"),
             StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     logger.info("created text file=" + outputTextFilePath.toString());
@@ -63,12 +53,15 @@ public class PngToTextConverter implements FormatConverter
 
   }
 
-  List<String> extractTextFromRectangles(Path inputImage)
+  List<String> extractTextFromRectangles(Path inputImage, List<Rectangle> rectangleList)
   {
     logger.info("performing OCR: " + inputImage.getFileName().toString());
     List<String> extractedInformation = new ArrayList<>();
-    for (Rectangle rectangle : this.imageFileViewportList) {
+    extractedInformation.add(FileUtils.removeExtension(inputImage.getFileName().toString()));
+    for (Rectangle rectangle : rectangleList) {
       String text = this.ocrExecutor.performTargetedOCR(inputImage, rectangle);
+      //remove double newline characters which make the file longer than necessary
+      text = text.replace("\n\n", "\n");
       extractedInformation.add(text);
     }
     return extractedInformation;

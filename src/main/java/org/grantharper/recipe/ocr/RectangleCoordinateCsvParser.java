@@ -4,6 +4,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.io.FileNotFoundException;
@@ -11,14 +12,15 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RectangleCoordinateCsvParser
+@Component
+public class RectangleCoordinateCsvParser implements RectangleProvider
 {
 
   private static final Logger logger = LogManager.getLogger(RectangleCoordinateCsvParser.class);
 
   private String csvFilename;
 
-  @Value("${csv.filename}")
+  @Value("${rectangleCsv.filename}")
   public void setCsvFilename(String csvFilename)
   {
     this.csvFilename = csvFilename;

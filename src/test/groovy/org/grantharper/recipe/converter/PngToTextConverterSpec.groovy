@@ -3,6 +3,8 @@ package org.grantharper.recipe.converter
 import net.sourceforge.tess4j.Tesseract
 import org.grantharper.recipe.ocr.OCRExecutor
 import org.grantharper.recipe.ocr.OCRExecutorImpl
+import org.grantharper.recipe.ocr.RectangleCoordinateCsvParser
+import org.grantharper.recipe.ocr.RectangleProvider
 import spock.lang.Specification
 
 import java.awt.Rectangle
@@ -32,18 +34,21 @@ class PngToTextConverterSpec extends Specification
   {
     given: "image and rectangle regions"
     List<Rectangle> rectangleList = new ArrayList<>()
+    RectangleProvider rectangleProvider = Stub(RectangleCoordinateCsvParser.class)
     Rectangle rectangle1 = new Rectangle(10, 0, 960, 300)
     Rectangle rectangle2 = new Rectangle(10, 300, 960, 300)
     rectangleList.add(rectangle1)
     rectangleList.add(rectangle2)
-    pngToTextConverter = new PngToTextConverter(ocrExecutor, rectangleList)
+    rectangleProvider.getRectangles() >> rectangleList
+    pngToTextConverter = new PngToTextConverter(ocrExecutor, rectangleProvider)
 
     when: "ocr is performed"
-    List<String> extractedText = pngToTextConverter.extractTextFromRectangles(inputImage)
+    List<String> extractedText = pngToTextConverter.extractTextFromRectangles(inputImage, rectangleList)
 
     then: "text is extracted"
-    extractedText.get(0).startsWith("Page 450")
-    extractedText.get(1).startsWith("Salt")
+    extractedText.get(0).startsWith("sample")
+    extractedText.get(1).contains("Page 450")
+    extractedText.get(2).startsWith("Salt")
 
   }
 
