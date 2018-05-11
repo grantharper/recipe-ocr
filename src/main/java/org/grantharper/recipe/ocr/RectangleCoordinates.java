@@ -3,6 +3,8 @@ package org.grantharper.recipe.ocr;
 
 import com.opencsv.bean.CsvBindByName;
 
+import java.awt.*;
+
 public class RectangleCoordinates
 {
   @CsvBindByName
@@ -37,6 +39,13 @@ public class RectangleCoordinates
   public int getY2()
   {
     return y2;
+  }
+
+  public Rectangle determineRectangleDimensions()
+  {
+    int rectangleWidth = x2 - x1;
+    int rectangleHeight = y2 - y1;
+    return new Rectangle(x1, y1, rectangleWidth, rectangleHeight);
   }
 
 }

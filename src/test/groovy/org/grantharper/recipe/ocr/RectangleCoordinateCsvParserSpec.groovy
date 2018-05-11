@@ -5,6 +5,7 @@ import com.opencsv.bean.CsvToBean
 import com.opencsv.bean.CsvToBeanBuilder
 import spock.lang.Specification
 
+import java.awt.Rectangle
 import java.nio.file.Paths
 
 class RectangleCoordinateCsvParserSpec extends Specification
@@ -17,13 +18,28 @@ class RectangleCoordinateCsvParserSpec extends Specification
   def setup()
   {
     rectangleCoordinateCsvParser = new RectangleCoordinateCsvParser()
+    rectangleCoordinateCsvParser.setCsvFilename(csvFilePath)
+  }
+
+  def "get list of rectangles"()
+  {
+    when: "csv parser is asked for rectangles"
+    List<Rectangle> rectangles = rectangleCoordinateCsvParser.getRectangles()
+
+    then: "rectangles are parsed out"
+    rectangles.get(0).x == 10
+    rectangles.get(0).width == 960
+    rectangles.get(0).y == 0
+    rectangles.get(0).height == 300
+    rectangles.get(1).y == 350
+
   }
 
   def "get list of rectangle coordinates"()
   {
     when: "csv parser is called"
     List<RectangleCoordinates> rectangleCoordinates =
-            rectangleCoordinateCsvParser.getCoordinateList(Paths.get(csvFilePath))
+            rectangleCoordinateCsvParser.getCoordinateList()
 
     then: "the coordinate list"
     rectangleCoordinates.get(0).x1 == 10
