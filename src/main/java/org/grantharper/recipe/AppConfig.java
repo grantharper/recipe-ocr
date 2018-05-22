@@ -26,9 +26,9 @@ public class AppConfig
   private String elasticsearchHostname;
 
   @Bean
-  public OCRExecutor ocrExecutor()
+  public Tesseract tesseract()
   {
-    return new OCRExecutorBufferedImage(new Tesseract());
+    return new Tesseract();
   }
 
   @Bean

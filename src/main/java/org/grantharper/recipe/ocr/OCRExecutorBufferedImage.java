@@ -13,12 +13,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
+@Component
 public class OCRExecutorBufferedImage implements OCRExecutor
 {
 
   private static final String TESS_RESOURCES_FOLDER = "tessdata";
   private final Tesseract tesseract;
 
+  @Autowired
   public OCRExecutorBufferedImage(Tesseract tesseract)
   {
     this.tesseract = tesseract;
