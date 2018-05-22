@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+@ComponentScan
 public class SearchElasticsearchApp
 {
 
@@ -25,28 +26,33 @@ public class SearchElasticsearchApp
 
   private RecipeSearch recipeSearch;
 
-  @Bean
-  RestHighLevelClient restHighLevelClient(){
-    return new RestHighLevelClient(
-            RestClient.builder(new HttpHost("localhost", 9200, "http"),
-                    new HttpHost("localhost", 9201, "http")));
+  @Autowired
+  public SearchElasticsearchApp(RecipeSearch recipeSearch)
+  {
+    this.recipeSearch = recipeSearch;
   }
 
   public static void main(String[] args)
   {
-    ApplicationContext context =
-            new AnnotationConfigApplicationContext(SearchElasticsearchApp.class);
-    SearchElasticsearchApp searchElasticsearchApp = new SearchElasticsearchApp();
-    searchElasticsearchApp.recipeSearch = context.getBean(RecipeSearch.class);
+      ApplicationContext context =
+              new AnnotationConfigApplicationContext(SearchElasticsearchApp.class);
 
-    searchElasticsearchApp.performSearches();
-    ElasticSearchClient elasticSearchClient = context.getBean(ElasticSearchClient.class);
-    elasticSearchClient.close();
+      SearchElasticsearchApp searchElasticsearchApp = context.getBean(SearchElasticsearchApp.class);
+
+      searchElasticsearchApp.performSearches();
+      ElasticSearchClient elasticSearchClient = context.getBean(ElasticSearchClient.class);
+      elasticSearchClient.close();
+
   }
 
   void performSearches(){
-    List<String> results = recipeSearch.searchRecipesForIngredients("unsalted asparagus");
+    try {
+      List<String> results = recipeSearch.searchRecipesForIngredients("unsalted asparagus");
+      logger.info(results);
 
+    } catch (Exception e) {
+      logger.error("search failure", e);
+    }
   }
 
 
