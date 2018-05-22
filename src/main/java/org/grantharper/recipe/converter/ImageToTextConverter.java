@@ -16,30 +16,28 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class PngToTextConverter implements FormatConverter
+public class ImageToTextConverter implements FormatConverter
 {
 
-  private static final Logger logger = LogManager.getLogger(PngToTextConverter.class);
+  private static final Logger logger = LogManager.getLogger(ImageToTextConverter.class);
 
   private final OCRExecutor ocrExecutor;
 
   private RectangleProvider rectangleProvider;
 
   @Autowired
-  public PngToTextConverter(OCRExecutor ocrExecutor, RectangleProvider rectangleProvider)
+  public ImageToTextConverter(OCRExecutor ocrExecutorBufferedImage, RectangleProvider rectangleProvider)
   {
-    this.ocrExecutor = ocrExecutor;
+    this.ocrExecutor = ocrExecutorBufferedImage;
     this.rectangleProvider = rectangleProvider;
   }
 
   @Override
   public Path convert(Path inputImage, Path outputDirectory) throws IOException
   {
-    logger.info("performing OCR: " + inputImage.getFileName().toString());
     List<Rectangle> rectangles = rectangleProvider.getRectangles();
     List<String> outputText = extractTextFromRectangles(inputImage, rectangles);
     Path outputTextFilePath = Paths.get(outputDirectory.toString(), FileUtils.changeFileExtensionToTxt(inputImage.getFileName()

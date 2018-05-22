@@ -7,10 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.grantharper.recipe.ocr.OCRExecutor;
-import org.grantharper.recipe.ocr.OCRExecutorImpl;
-import org.grantharper.recipe.ocr.RectangleCoordinateCsvParser;
-import org.grantharper.recipe.ocr.RectangleProvider;
+import org.grantharper.recipe.ocr.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +28,7 @@ public class AppConfig
   @Bean
   public OCRExecutor ocrExecutor()
   {
-    return new OCRExecutorImpl(new Tesseract());
+    return new OCRExecutorBufferedImage(new Tesseract());
   }
 
   @Bean

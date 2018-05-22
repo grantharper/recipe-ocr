@@ -11,12 +11,12 @@ import java.awt.Rectangle
 import java.nio.file.Path
 import java.nio.file.Paths
 
-class PngToTextConverterSpec extends Specification
+class ImageToTextConverterSpec extends Specification
 {
 
   Path inputImage;
   OCRExecutor ocrExecutor;
-  PngToTextConverter pngToTextConverter;
+  ImageToTextConverter imageToTextConverter;
 
   def setup()
   {
@@ -40,10 +40,10 @@ class PngToTextConverterSpec extends Specification
     rectangleList.add(rectangle1)
     rectangleList.add(rectangle2)
     rectangleProvider.getRectangles() >> rectangleList
-    pngToTextConverter = new PngToTextConverter(ocrExecutor, rectangleProvider)
+    imageToTextConverter = new ImageToTextConverter(ocrExecutor, rectangleProvider)
 
     when: "ocr is performed"
-    List<String> extractedText = pngToTextConverter.extractTextFromRectangles(inputImage, rectangleList)
+    List<String> extractedText = imageToTextConverter.extractTextFromRectangles(inputImage, rectangleList)
 
     then: "text is extracted"
     extractedText.get(0).startsWith("sample")

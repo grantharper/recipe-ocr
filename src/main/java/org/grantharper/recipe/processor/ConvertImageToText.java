@@ -21,11 +21,9 @@ public class ConvertImageToText
 
   private static final Logger logger = LogManager.getLogger(ConvertImageToText.class);
 
-  private FormatConverter jpegToPngConverter;
-  private FormatConverter pngToTextConverter;
+  private FormatConverter imageToTextConverter;
 
   private Path txtOutputDir;
-  private Path pngOutputDir;
 
   @Value("${outputDir.txt}")
   void setTxtOutputDir(String txtOutputDir)
@@ -33,26 +31,14 @@ public class ConvertImageToText
     this.txtOutputDir = Paths.get(txtOutputDir);
   }
 
-  @Value("${outputDir.png}")
-  void setPngOutputDir(String pngOutputDir)
-  {
-    this.pngOutputDir = Paths.get(pngOutputDir);
-  }
-
   @Autowired
-  public ConvertImageToText(FormatConverter jpegToPngConverter, FormatConverter pngToTextConverter)
+  public ConvertImageToText(FormatConverter imageToTextConverter)
   {
-    this.jpegToPngConverter = jpegToPngConverter;
-    this.pngToTextConverter = pngToTextConverter;
+    this.imageToTextConverter = imageToTextConverter;
   }
 
   public void convert(RecipeMenuUserSelection recipeMenuUserSelection)
   {
-    if (Files.exists(this.pngOutputDir)) {
-      FileUtils.cleanDirectory(this.pngOutputDir);
-    }else {
-      FileUtils.createDirectory(this.pngOutputDir);
-    }
     if (Files.exists(this.txtOutputDir)) {
       FileUtils.cleanDirectory(this.txtOutputDir);
     }else {
@@ -89,8 +75,7 @@ public class ConvertImageToText
 
     try {
       logger.info("processing " + imageFile.getFileName().toString());
-      Path pngImageFile = jpegToPngConverter.convert(imageFile, this.pngOutputDir);
-      Path textFile = pngToTextConverter.convert(pngImageFile, this.txtOutputDir);
+      Path textFile = imageToTextConverter.convert(imageFile, this.txtOutputDir);
 
     } catch (OCRException e) {
       logger.error("Error with OCR processing: " + imageFile, e);
