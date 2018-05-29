@@ -11,7 +11,7 @@ class RecipeJsonCreatorSpec extends Specification
   
   RecipeJsonCreator creator = new RecipeJsonCreator(new ObjectMapper())
   
-  List<String> ingredients = ["3 cups crumbled Greek feta","2/3 cup extra�virgin olive oil, plus more for serving",
+  List<String> ingredients = ["3 cups crumbled Greek feta","2/3 cup extra virgin olive oil, plus more for serving",
                               "Zest and juice of 1 lemon","Freshly ground black pepper"]
   
   Recipe recipe = new Recipe("Sur La Table","Whipped Feta with Grilled Pita Bread","2",
@@ -31,6 +31,8 @@ class RecipeJsonCreatorSpec extends Specification
     json.contains("{")
     json.contains(recipe.title)
     json.contains(recipe.pageId)
+    json.contains("ingredientsList")
+
     
   }
 

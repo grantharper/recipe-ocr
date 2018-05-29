@@ -1,6 +1,9 @@
 package org.grantharper.recipe.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Recipe
 {
@@ -42,6 +45,12 @@ public class Recipe
     return instructions;
   }
 
+  @JsonProperty
+  public String getIngredientsList()
+  {
+    return ingredients.stream().collect(Collectors.joining("\n"));
+  }
+
   public Recipe(String book, String title, String pageId, String servingSize, List<String> ingredients, String instructions)
   {
     super();
@@ -55,12 +64,10 @@ public class Recipe
 
   public Recipe(){}
 
-
   @Override
   public String toString()
   {
     return "Recipe [title=" + title + "]";
   }
-
 
 }
