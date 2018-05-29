@@ -1,5 +1,6 @@
 package org.grantharper.recipe.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -49,6 +50,12 @@ public class Recipe
   public String getIngredientsList()
   {
     return ingredients.stream().collect(Collectors.joining("\n"));
+  }
+
+  @JsonIgnore //this is to allow for creating the POJO from json that contains the ingredientsList field
+  public void setIngredientsList(String ingredientsList)
+  {
+    //do nothing since all ingredient information is in the ingredients variable
   }
 
   public Recipe(String book, String title, String pageId, String servingSize, List<String> ingredients, String instructions)
