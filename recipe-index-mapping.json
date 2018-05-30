@@ -7,7 +7,8 @@
         "pageId": {"type": "keyword"},
         "servingSize": {"type": "text"},
         "ingredients": {"type": "text"},
-        "instructions": {"type": "text"}
+        "instructions": {"type": "text"},
+        "ingredientsList": {"type": "text"}
       }
     }
   }
