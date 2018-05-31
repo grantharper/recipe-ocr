@@ -1,4 +1,6 @@
-package org.grantharper.recipe.serializer
+package org.grantharper.recipe
+
+import org.grantharper.recipe.serializer.FileUtils
 
 import java.nio.charset.Charset
 import java.nio.file.Files
