@@ -21,7 +21,7 @@ class ImageToTextConverterSpec extends Specification
   def setup()
   {
     ocrExecutor = new OCRExecutorImpl(new Tesseract())
-    inputImage = Paths.get("src/test/resources/sample.png")
+    inputImage = Paths.get("src/test/resources/sample.jpg")
   }
 
   def cleanup()

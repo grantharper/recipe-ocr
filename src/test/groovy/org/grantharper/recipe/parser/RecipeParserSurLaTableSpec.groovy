@@ -79,7 +79,7 @@ class RecipeParserSurLaTableSpec extends Specification
 
   def "Identify indices of the ingredients, instructions, and footer"()
   {
-    when: "indices are extracte from the recipe"
+    when: "indices are extracted from the recipe"
     recipeCreator.recipeLines
     recipeCreator.identifyLineIndexes()
 
@@ -116,7 +116,7 @@ class RecipeParserSurLaTableSpec extends Specification
 
     then: "instructions are correct"
     instructions != null
-    !instructions.contains("Mix together flour and salt")
+    instructions.contains("Mix together the flour and salt")
 
 
   }
