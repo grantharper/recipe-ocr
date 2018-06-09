@@ -3,6 +3,7 @@ data/output/
 tessdata/
 src/test/out/
 out/
+recipe-application.log
 
 # Ant
 ant/
